@@ -6,3 +6,8 @@
     height: 100vh;
     background-color: #5A287D;
 }
+
+.row {
+    /* background-color: red; */
+    font-size: large;
+}

@@ -14,8 +14,6 @@ public class User {
     private String userName;
     @Column(name = "user_email")
     private String userEmail;
-    @Column(name = "user_pass")
-    private String userPassword;
 
     public User() {
         super();
@@ -26,7 +24,6 @@ public class User {
         this.userId = userId;
         this.userName = userName;
         this.userEmail = userEmail;
-        this.userPassword = userPassword;
     }
 
     public int getUserId() {
@@ -53,21 +50,12 @@ public class User {
         this.userEmail = userEmail;
     }
 
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
     @Override
     public String toString() {
         return "\nUser{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", userEmail='" + userEmail + '\'' +
-                ", userPassword='" + userPassword + '\'' +
                 "}\n";
     }
 }

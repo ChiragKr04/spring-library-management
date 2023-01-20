@@ -1,9 +1,50 @@
-import axios from 'axios';
 import React, { Component } from 'react';
 import "./Login.css"
+import { ApiConstants } from "../../constants/ApiConstants"
+import { RestApiService } from '../../utils/RestApiService';
 
 
 export default class Login extends Component {
+
+    getAllData = async () => {
+        try {
+            await RestApiService.get(
+                ApiConstants.getAllUser,
+                {
+                    "Authorization": "any-auth-token"
+                },
+            ).then((json) => {
+                this.setState({
+                    userData: json.data,
+                    isLoading: false
+                });
+            })
+        } catch (e) {
+            this.setState({
+                userData: [],
+                isLoading: false
+            });
+        }
+    }
+
+    loginUser = async () => {
+        try {
+            await RestApiService.post(
+                ApiConstants.login,
+                {
+                    "Authorization": "any-auth-token"
+                },
+                {
+                    "userEmail": "chirag@gmail.com",
+                    "userPass": "123456"
+                }
+            ).then((json) => {
+                console.log(`[loginUser] ${json}`);
+            })
+        } catch (e) {
+
+        }
+    }
 
     constructor(props) {
         super();
@@ -15,15 +56,10 @@ export default class Login extends Component {
     }
 
     componentDidMount() {
-        fetch(
-            "http://localhost:4000/library/getAllUser")
-            .then((res) => res.json())
-            .then((json) => {
-                this.setState({
-                    userData: json,
-                    isLoading: false
-                });
-            })
+        this.getAllData().then(() => {
+            this.loginUser()
+        })
+
     }
 
     render() {
@@ -39,10 +75,12 @@ export default class Login extends Component {
                         (isLoading)
                             ? <div> Loading...</div>
                             : <div> {userData.map((item) => (
-                                <li key={item.userId}>User Id: {item.userId},
+                                <li key={item.userId}>
+                                    User Id: {item.userId},
                                     User_Name: {item.userName},
                                     Email: {item.userEmail},
-                                    Password: {item.userPassword}</li>
+                                    Password: {item.userPassword}
+                                </li>
                             ))
                             } </div>
                     }
