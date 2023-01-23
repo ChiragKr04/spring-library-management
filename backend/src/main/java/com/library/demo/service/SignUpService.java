@@ -16,8 +16,6 @@ public class SignUpService {
     @Autowired
     EmailService emailService;
     public String signUp(UserCredential user){
-        System.out.println("SignUp" + user.getEmailId());
-        System.out.println(userRepository.existsByEmailId(user.getEmailId()));
         if (userRepository.existsByEmailId(user.getEmailId())) {
             return "Already an account exist with this emailId";
         }

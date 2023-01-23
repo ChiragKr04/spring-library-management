@@ -20,11 +20,6 @@ public class Controller {
 
     @PostMapping(path = "/signUp")
     public String signUp(@RequestBody UserCredential userCredential){
-        System.out.println(userCredential.getEmailId());
-        System.out.println(userCredential.getFirstname());
-        System.out.println(userCredential.getLastname());
-        System.out.println(userCredential.getPhoneNo());
-        System.out.println(userCredential.getAddress());
         return signUpService.signUp(userCredential);
     }
 }

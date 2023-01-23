@@ -16,8 +16,6 @@ public class EmailService {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("applicationtest0001@gmail.com");
         simpleMailMessage.setTo(user.getEmailId());
-        //String password = passwordGenerator.generatePassword();
-       // System.out.println(password);
         simpleMailMessage.setSubject("Credential");
         simpleMailMessage.setText("Hi " +user.getFirstname()
                 + "\nThese are your credentials.\n"
