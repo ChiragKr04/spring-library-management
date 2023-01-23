@@ -8,7 +8,7 @@ export class RestApiService {
         };
         await axios.get(url, requestOptions)
             .then((result) => {
-                console.log(result)
+                // console.log(result)
                 data = result
             })
             .catch(error => console.log('error[get]', error));
@@ -16,7 +16,6 @@ export class RestApiService {
     }
 
     static post = async (url, headers, body) => {
-        console.log("hereeee");
         var data = []
         var newheaders = {
             "Content-Type": "application/json",
@@ -28,11 +27,10 @@ export class RestApiService {
 
         await axios.post(url, body, requestOptions)
             .then(result => {
-                console.log(result)
+                // console.log(result)
                 data = result
             })
             .catch(error => console.log('error[post]', error));
-        console.log("done hereeee post");
         return data;
     }
 }

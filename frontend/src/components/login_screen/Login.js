@@ -1,33 +1,25 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import "./Login.css"
 import { ApiConstants } from "../../constants/ApiConstants"
 import { RestApiService } from '../../utils/RestApiService';
+import { useNavigate } from 'react-router-dom';
 
+export default function Login() {
 
-export default class Login extends Component {
+    const [email, setEmail] = useState("");
+    const [password, setPassw] = useState("");
+    const navigate = useNavigate();
+    let currentUser = {};
 
-    getAllData = async () => {
-        try {
-            await RestApiService.get(
-                ApiConstants.getAllUser,
-                {
-                    "Authorization": "any-auth-token"
-                },
-            ).then((json) => {
-                this.setState({
-                    userData: json.data,
-                    isLoading: false
-                });
-            })
-        } catch (e) {
-            this.setState({
-                userData: [],
-                isLoading: false
-            });
-        }
+    const navigateToHome = () => {
+        navigate('/home', {
+            state: {
+                currentUser: currentUser
+            }
+        });
     }
 
-    loginUser = async () => {
+    const loginUser = async () => {
         try {
             await RestApiService.post(
                 ApiConstants.login,
@@ -35,57 +27,34 @@ export default class Login extends Component {
                     "Authorization": "any-auth-token"
                 },
                 {
-                    "userEmail": "chirag@gmail.com",
-                    "userPass": "123456"
+                    "userEmail": email,
+                    "userPass": password
                 }
-            ).then((json) => {
-                console.log(`[loginUser] ${json}`);
+            ).then((result) => {
+                currentUser = JSON.parse(JSON.stringify(result["data"]));
+                console.log(`current user ${currentUser.userId}`);
+                if (currentUser.userId != null) {
+                    navigateToHome();
+                }
             })
         } catch (e) {
 
         }
     }
-
-    constructor(props) {
-        super();
-        this.state = {
-            userData: [],
-            isLoading: true
-        };
-
-    }
-
-    componentDidMount() {
-        this.getAllData().then(() => {
-            this.loginUser()
-        })
-
-    }
-
-    render() {
-        const { isLoading, userData } = this.state;
-        return (
-            <div className="center">
-                <h1>
-                    Hello world!
-                </h1>
-
-                <div className="row">
-                    {
-                        (isLoading)
-                            ? <div> Loading...</div>
-                            : <div> {userData.map((item) => (
-                                <li key={item.userId}>
-                                    User Id: {item.userId},
-                                    User_Name: {item.userName},
-                                    Email: {item.userEmail},
-                                    Password: {item.userPassword}
-                                </li>
-                            ))
-                            } </div>
-                    }
+    return (
+        <div>
+            <form action="" onSubmit={loginUser}>
+                <div>
+                    <label htmlFor="email">Email</label>
+                    <input type="text" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
-            </div>
-        )
-    }
+                <div>
+                    <label htmlFor="passw">Password</label>
+                    <input type="text" name="passw" id="passw" value={password} onChange={(e) => setPassw(e.target.value)} />
+                </div>
+                <button type="button" onClick={loginUser}>Login</button>
+            </form>
+        </div>
+    )
 }
+
