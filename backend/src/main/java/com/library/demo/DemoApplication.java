@@ -1,13 +1,13 @@
-package com.library.library_prg;
+package com.library.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LibraryPrgApplication {
+public class DemoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LibraryPrgApplication.class, args);
+		SpringApplication.run(DemoApplication.class, args);
 	}
 
 }
