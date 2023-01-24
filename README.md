@@ -19,3 +19,6 @@
     - Photo update
 
 
+## Screenshots
+![image](https://github.com/ChiragKr04/spring-library-management/blob/dev-chirag/frontend/git-images/s1.png)
+
