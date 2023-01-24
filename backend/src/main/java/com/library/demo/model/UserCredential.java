@@ -1,5 +1,4 @@
 package com.library.demo.model;
-
 import javax.persistence.*;
 
 @Entity
