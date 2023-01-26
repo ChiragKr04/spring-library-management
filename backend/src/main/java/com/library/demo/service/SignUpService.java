@@ -1,9 +1,7 @@
 package com.library.demo.service;
 
-import com.library.demo.model.Result;
+import com.library.demo.model.Response;
 import com.library.demo.model.UserCredential;
-import com.library.demo.model.UserData;
-import com.library.demo.model.UserLogin;
 import com.library.demo.repository.UserCredentialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,30 +16,21 @@ public class SignUpService {
     PasswordGenerator passwordGenerator;
     @Autowired
     EmailService emailService;
-    public String signUp(UserCredential user){
+
+
+    public Response signUp(UserCredential user){
+        Response response= new Response();
+        System.out.println("SignUp" + user.getEmailId());
+        System.out.println(userRepository.existsByEmailId(user.getEmailId()));
         if (userRepository.existsByEmailId(user.getEmailId())) {
-            return "Already an account exist with this emailId";
+            response.setError("Already an account exist with this emailId");
+            return response;
         }
         user.setUserId(userIdGenerator.idGenerator());
         user.setPassword(passwordGenerator.generatePassword());
         userRepository.save(user);
-        emailService.sendEmail(user);
-
-        return "Account is created";
-    }
-
-    public Result login(UserLogin user){
-        Object[] result = (Object[]) userRepository.getUser(user.userId(), user.password());
-        if(result == null){
-            return new Result(
-                    false,
-                    null
-            );
-        }
-
-        return new Result(
-                true,
-                UserData.toJson(result)
-        );
+        //emailService.sendEmail(user);
+        response.setMessage("Account is created");
+        return response;
     }
 }

@@ -1,4 +1,5 @@
 package com.library.demo.model;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,7 +16,7 @@ public class UserCredential {
     private String address;
     @Column(name = "FirstName", nullable = false)
     private String firstName;
-    @Column(name = "LastName", nullable = false)
+    @Column(name = "LastName")
     private String lastName;
 
     public String getFirstname() {
