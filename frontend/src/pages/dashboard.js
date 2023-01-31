@@ -116,26 +116,39 @@ export default function Dashboard() {
       </AppBar>
       {listData.map((e) => {
         return (
-          <Card sx={{ minWidth: 275 }}>
-            <CardContent>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                {e.author}
-              </Typography>
-              <Typography variant="h5" component="div">
-                {e.title}
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {e.available ? "Available" : "Not Available"}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">Borrow</Button>
-            </CardActions>
-          </Card>
+          <div style={{ margin: "15px" }}>
+            <Card>
+              <CardContent>
+                <div
+                  style={{ display: "flex", gap: "10px", alignItems: "center" }}
+                >
+                  <img
+                    src={e.image}
+                    style={{ width: "60px", height: "70px" }}
+                  ></img>
+                  <div id="bookInfo">
+                    <Typography
+                      sx={{ fontSize: 14 }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      {e.author}
+                    </Typography>
+
+                    <Typography variant="h5" component="div">
+                      {e.title}
+                    </Typography>
+                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                      {e.available ? "Available" : "Not Available"}
+                    </Typography>
+                  </div>
+                </div>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Borrow</Button>
+              </CardActions>
+            </Card>
+          </div>
         );
       })}
     </Box>

@@ -17,6 +17,16 @@ public class Book {
     @NonNull
     private boolean available;
 
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public boolean isAvailable() {
         return available;
     }
