@@ -138,7 +138,7 @@ export default function Dashboard() {
                     <Typography variant="h5" component="div">
                       {e.title}
                     </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    <Typography sx={{ mb: 1.6 }} color="text.secondary">
                       {e.available ? "Available" : "Not Available"}
                     </Typography>
                   </div>
