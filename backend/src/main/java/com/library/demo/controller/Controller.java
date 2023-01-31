@@ -39,6 +39,7 @@ public class Controller {
     public Response login(@RequestBody UserCredential userCredential){
         System.out.println(userCredential.getUserId() +" \n"+ userCredential.getPassword());
         System.out.println(loginService.login(userCredential));
+
         return loginService.login(userCredential);
     }
     @PostMapping(path = "/search")
