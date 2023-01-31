@@ -11,4 +11,8 @@ public interface UserCredentialRepository extends JpaRepository<UserCredential,I
     // boolean existByEmailID(String email);
    @Query(value = "select * from user_credential where user_id = ?1 and password = ?2", nativeQuery = true)
     UserCredential fetchUser(String userId,String password);
+
+    boolean existsByUserId(String userId);
+
+    //boolean findById(String userId);
 }

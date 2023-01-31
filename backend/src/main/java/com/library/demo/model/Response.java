@@ -5,6 +5,16 @@ import org.springframework.context.annotation.Bean;
 public class Response {
     private String message, error;
 
+    private LoginPayload loginPayload;
+
+    public LoginPayload getLoginPayload() {
+        return loginPayload;
+    }
+
+    public void setLoginPayload(LoginPayload loginPayload) {
+        this.loginPayload = loginPayload;
+    }
+
     public String getMessage() {
         return message;
     }
