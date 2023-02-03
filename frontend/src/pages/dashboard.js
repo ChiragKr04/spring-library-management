@@ -7,7 +7,6 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useAuthState } from "../context/context";
 import InputBase from "@mui/material/InputBase";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 import { ApiConstants } from "../util/ApiConstants";
@@ -16,8 +15,18 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Popover, Tooltip } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import HistoryIcon from "@mui/icons-material/History";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { color } from "@mui/system";
 
-//const [searchBook,setSerBook] = React.useState("")
+const menuItem = [
+  { title: "Filter", icon: <FilterAltIcon /> ,type: "filter"},
+  { title: "History", icon: <HistoryIcon /> , type: "history"},
+  { title: "Logout", icon: <LogoutIcon /> , type: "logout"},
+];
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -71,7 +80,33 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function Dashboard() {
   const userDetails = useAuthState();
   const [listData, setListData] = React.useState([]);
+  const [popOver, setPopOver] = React.useState(false);
+  const [borrow, setBorrow] = React.useState(false);
 
+  //Borrow book copies popOver
+  const borrowClick = (event) => {
+    console.log(event.currentTarget);
+    setBorrow(event.currentTarget);
+  };
+
+  const borrowClose = (event) => {
+    setBorrow(null);
+  };
+
+  //menu popOver
+  const handleClick = (event) => {
+    console.log(event.currentTarget);
+    setPopOver(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setPopOver(null);
+  };
+
+  const open = Boolean(popOver);
+  const id = open ? "simple-popover" : undefined;
+  const borrowBook = Boolean(borrow);
+  const borrowId = borrowBook ? "simple-popover" : undefined;
   const searchBooks = async (e) => {
     if (e.target.value.length > 0) {
       console.log(e.target.value);
@@ -89,16 +124,59 @@ export default function Dashboard() {
       });
     }
   };
+
+  const handleButton =(type)=>{
+    if(type === "filter"){
+      console.log("filter");
+    }
+    if(type === "history") {
+      setListData(null)
+      console.log("history");
+    }
+    if (type === "logout"){
+      console.log("logout");
+    }
+  }
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
+
+
+    <Box
+      sx={{ flexGrow: 1 }}
+      style={{ backgroundColor: "gainsboro", height: "100vh" }}
+    >
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar style={{ display: "flex", alignItems: "center" }}>
           <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
+            <IconButton aria-label="menu" onClick={handleClick}>
+              <MenuIcon style={{ color: "white" }} />
+            </IconButton>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={popOver}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+            >
+              {menuItem.map((el) => {
+                return (
+                  <div>
+                    <Button onClick={()=>handleButton(el.type)} style={{color: "black"}}>
+                      {el.icon}
+                      <div>{el.title}</div>
+                    </Button>
+                  </div>
+                );
+              })}
+            </Popover>
             Hi {userDetails.userDetail.loginPayload.firstname}&nbsp;
             {userDetails.userDetail.loginPayload.lastname}
           </Typography>
@@ -114,43 +192,115 @@ export default function Dashboard() {
           </Search>
         </Toolbar>
       </AppBar>
-      {listData.map((e) => {
-        return (
-          <div style={{ margin: "15px" }}>
-            <Card>
-              <CardContent>
-                <div
-                  style={{ display: "flex", gap: "10px", alignItems: "center" }}
-                >
-                  <img
-                    src={e.image}
-                    style={{ width: "60px", height: "70px" }}
-                  ></img>
-                  <div id="bookInfo">
-                    <Typography
-                      sx={{ fontSize: 14 }}
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      {e.author}
-                    </Typography>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          paddingLeft: "0",
+        }}
+      >
+        {listData?.map((e,i) => {
+          return (
+            <div key={i} style={{ margin: "15px", display: "flex" }}>
+              <Card style={{ width: "300px" }}>
+                <CardContent style={{ height: "95px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      alt={e.title}
+                      src={e.image}
+                      style={{ width: "60px", height: "70px" }}
+                    ></img>
+                    <div id="bookInfo">
+                      <Typography
+                        sx={{ fontSize: 14 }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        <Tooltip title={e.author} placement="top-start">
+                          <div
+                            style={{
+                              textOverflow: "ellipsis",
+                              overflow: "hidden",
+                              width: "180px",
+                              whiteSpace: "nowrap"
+                            }}
+                          >
+                            {e.author}
+                          </div>
+                        </Tooltip>
+                      </Typography>
 
-                    <Typography variant="h5" component="div">
-                      {e.title}
-                    </Typography>
-                    <Typography sx={{ mb: 1.6 }} color="text.secondary">
+                      <Typography variant="h5" component="div">
+                        {e.title}
+                      </Typography>
+                    </div>
+                  </div>
+                </CardContent>
+                <CardActions>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100%",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Button size="small" disabled={!e.available} onClick={borrowClick}>
+                      Borrow
+                    </Button>
+                    <Typography
+                      color="text.secondary"
+                      style={
+                        e.available ? { color: "green" } : { color: "red" }
+                      }
+                    >
                       {e.available ? "Available" : "Not Available"}
                     </Typography>
                   </div>
-                </div>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Borrow</Button>
-              </CardActions>
-            </Card>
-          </div>
-        );
-      })}
+                  {
+                    <Popover
+                      id={borrowId}
+                      open={borrowBook}
+                      anchorEl={borrow}
+                      onClose={borrowClose}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left",
+                      }}
+                    >
+                      <div>
+                        <Button>
+                          <FilterAltIcon />
+                          Copy1
+                        </Button>
+                      </div>
+                      <div>
+                        <Button>
+                          <HistoryIcon />
+                          Copy2
+                        </Button>
+                      </div>
+                      <div>
+                        <Button>
+                          <LogoutIcon />
+                          Cop3
+                        </Button>
+                      </div>
+                    </Popover>
+                  }
+                </CardActions>
+              </Card>
+            </div>
+          );
+        })}
+      </div>
     </Box>
   );
 }
