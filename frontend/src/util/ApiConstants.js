@@ -1,6 +1,9 @@
 export class ApiConstants {
-    static getAllUser = "http://localhost:8080/demo/getAllUser";
-    static login = "http://localhost:8080/demo/login";
-    static signup = "http://localhost:8080/demo/signUp";
-    static getBooks ="http://localhost:8080/demo/search";
+    // static port = 8080;
+    static port = 5000;
+    static mainUrl = `http://localhost:${this.port}/demo`;
+    static getAllUser = `${this.mainUrl}/getAllUser`;
+    static login = `${this.mainUrl}/login`;
+    static signup = `${this.mainUrl}/signUp`;
+    static getBooks = `${this.mainUrl}/search`;
 }

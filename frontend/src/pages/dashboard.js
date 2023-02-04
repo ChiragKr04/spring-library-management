@@ -23,9 +23,9 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { color } from "@mui/system";
 
 const menuItem = [
-  { title: "Filter", icon: <FilterAltIcon /> ,type: "filter"},
-  { title: "History", icon: <HistoryIcon /> , type: "history"},
-  { title: "Logout", icon: <LogoutIcon /> , type: "logout"},
+  { title: "Filter", icon: <FilterAltIcon />, type: "filter" },
+  { title: "History", icon: <HistoryIcon />, type: "history" },
+  { title: "Logout", icon: <LogoutIcon />, type: "logout" },
 ];
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -125,15 +125,15 @@ export default function Dashboard() {
     }
   };
 
-  const handleButton =(type)=>{
-    if(type === "filter"){
+  const handleButton = (type) => {
+    if (type === "filter") {
       console.log("filter");
     }
-    if(type === "history") {
+    if (type === "history") {
       setListData(null)
       console.log("history");
     }
-    if (type === "logout"){
+    if (type === "logout") {
       console.log("logout");
     }
   }
@@ -168,8 +168,8 @@ export default function Dashboard() {
             >
               {menuItem.map((el) => {
                 return (
-                  <div>
-                    <Button onClick={()=>handleButton(el.type)} style={{color: "black"}}>
+                  <div key={el.type}>
+                    <Button onClick={() => handleButton(el.type)} style={{ color: "black" }}>
                       {el.icon}
                       <div>{el.title}</div>
                     </Button>
@@ -200,10 +200,10 @@ export default function Dashboard() {
           paddingLeft: "0",
         }}
       >
-        {listData?.map((e,i) => {
+        {listData?.map((e, i) => {
           return (
             <div key={i} style={{ margin: "15px", display: "flex" }}>
-              <Card style={{ width: "300px" }}>
+              <Card key={e.id} style={{ width: "300px" }}>
                 <CardContent style={{ height: "95px" }}>
                   <div
                     style={{
@@ -224,7 +224,7 @@ export default function Dashboard() {
                         gutterBottom
                       >
                         <Tooltip title={e.author} placement="top-start">
-                          <div
+                          <span
                             style={{
                               textOverflow: "ellipsis",
                               overflow: "hidden",
@@ -233,7 +233,7 @@ export default function Dashboard() {
                             }}
                           >
                             {e.author}
-                          </div>
+                          </span>
                         </Tooltip>
                       </Typography>
 
