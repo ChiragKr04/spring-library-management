@@ -16,4 +16,9 @@ public class BookService {
         System.out.println(search.getClass());
         return bookRepository.findByTitleContaining(search.getSearch());
     }
+
+    public Book addBook(Book book){
+        return bookRepository.save(book);
+    }
+
 }

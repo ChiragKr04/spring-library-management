@@ -46,4 +46,9 @@ public class Controller {
     public List<Book> getBook(@RequestBody SearchBooks search){
         return bookService.fetchBook(search);
     }
+
+    @PostMapping(path="/add-book")
+    public Book addBook(@RequestBody Book book){
+        return bookService.addBook(book);
+    }
 }
