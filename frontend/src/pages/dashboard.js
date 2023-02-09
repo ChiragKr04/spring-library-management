@@ -20,7 +20,10 @@ import { Popover, Tooltip } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HistoryIcon from "@mui/icons-material/History";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import borrowButtonModal from "../components/borrowButtonModal";
 import { color } from "@mui/system";
+import { useHistory } from "react-router-dom";
+import BorrowButtonModal from "../components/borrowButtonModal";
 
 const menuItem = [
   { title: "Filter", icon: <FilterAltIcon />, type: "filter" },
@@ -81,12 +84,16 @@ export default function Dashboard() {
   const userDetails = useAuthState();
   const [listData, setListData] = React.useState([]);
   const [popOver, setPopOver] = React.useState(false);
-  const [borrow, setBorrow] = React.useState(false);
+  const [borrow, setBorrow] = React.useState(true);
+  const [bookCopyData, setBookCopyData] = React.useState();
+  const history = useHistory();
 
   //Borrow book copies popOver
-  const borrowClick = (event) => {
-    console.log(event.currentTarget);
-    setBorrow(event.currentTarget);
+  const borrowClick = (data) => {
+    console.log(data.title);
+    setBookCopyData(data);
+    //setBorrow(true)
+    //history.push("/dashboard/book/"+id)
   };
 
   const borrowClose = (event) => {
@@ -105,11 +112,9 @@ export default function Dashboard() {
 
   const open = Boolean(popOver);
   const id = open ? "simple-popover" : undefined;
-  const borrowBook = Boolean(borrow);
-  const borrowId = borrowBook ? "simple-popover" : undefined;
   const searchBooks = async (e) => {
-    if (e.target.value.length > 0) {
-      console.log(e.target.value);
+    if (e.target.value.length > 2) {
+      //console.log(e.target.value);
       await RestApiService.post(
         ApiConstants.getBooks,
         {
@@ -120,7 +125,7 @@ export default function Dashboard() {
         }
       ).then((result) => {
         setListData(result["data"]);
-        console.log(listData);
+        // console.log(listData);
       });
     }
   };
@@ -130,20 +135,18 @@ export default function Dashboard() {
       console.log("filter");
     }
     if (type === "history") {
-      setListData(null)
+      setListData(null);
       console.log("history");
     }
     if (type === "logout") {
       console.log("logout");
     }
-  }
+  };
 
   return (
-
-
     <Box
       sx={{ flexGrow: 1 }}
-      style={{ backgroundColor: "gainsboro", height: "100vh" }}
+      style={{ backgroundColor: "gainsboro", height: "100%" }}
     >
       <AppBar position="static">
         <Toolbar style={{ display: "flex", alignItems: "center" }}>
@@ -169,7 +172,10 @@ export default function Dashboard() {
               {menuItem.map((el) => {
                 return (
                   <div key={el.type}>
-                    <Button onClick={() => handleButton(el.type)} style={{ color: "black" }}>
+                    <Button
+                      onClick={() => handleButton(el.type)}
+                      style={{ color: "black" }}
+                    >
                       {el.icon}
                       <div>{el.title}</div>
                     </Button>
@@ -203,7 +209,7 @@ export default function Dashboard() {
         {listData?.map((e, i) => {
           return (
             <div key={i} style={{ margin: "15px", display: "flex" }}>
-              <Card key={e.id} style={{ width: "300px" }}>
+              <Card key={e.id} style={{ width: "635px" }}>
                 <CardContent style={{ height: "95px" }}>
                   <div
                     style={{
@@ -229,7 +235,7 @@ export default function Dashboard() {
                               textOverflow: "ellipsis",
                               overflow: "hidden",
                               width: "180px",
-                              whiteSpace: "nowrap"
+                              whiteSpace: "nowrap",
                             }}
                           >
                             {e.author}
@@ -237,8 +243,19 @@ export default function Dashboard() {
                         </Tooltip>
                       </Typography>
 
-                      <Typography variant="h5" component="div">
-                        {e.title}
+                      <Typography variant="h6" component="div">
+                        <Tooltip title={e.title} placement="bottom-start">
+                          <span
+                          // style={{
+                          //   textOverflow: "ellipsis",
+                          //   overflow: "hidden",
+                          //   width: "250px",
+                          //   whiteSpace: "nowrap"
+                          // }}
+                          >
+                            {e.title}
+                          </span>
+                        </Tooltip>
                       </Typography>
                     </div>
                   </div>
@@ -252,9 +269,7 @@ export default function Dashboard() {
                       justifyContent: "space-between",
                     }}
                   >
-                    <Button size="small" disabled={!e.available} onClick={borrowClick}>
-                      Borrow
-                    </Button>
+                    <BorrowButtonModal e={e} />
                     <Typography
                       color="text.secondary"
                       style={
@@ -264,39 +279,11 @@ export default function Dashboard() {
                       {e.available ? "Available" : "Not Available"}
                     </Typography>
                   </div>
-                  {
-                    <Popover
-                      id={borrowId}
-                      open={borrowBook}
-                      anchorEl={borrow}
-                      onClose={borrowClose}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "left",
-                      }}
-                    >
-                      <div>
-                        <Button>
-                          <FilterAltIcon />
-                          Copy1
-                        </Button>
-                      </div>
-                      <div>
-                        <Button>
-                          <HistoryIcon />
-                          Copy2
-                        </Button>
-                      </div>
-                      <div>
-                        <Button>
-                          <LogoutIcon />
-                          Cop3
-                        </Button>
-                      </div>
-                    </Popover>
-                  }
                 </CardActions>
               </Card>
+              {/* <borrowButtonModal title={e.title} open={borrow} handleClose={borrowClose} handleOpen={borrowClick}>
+
+</borrowButtonModal> */}
             </div>
           );
         })}
