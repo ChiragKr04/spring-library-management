@@ -62,14 +62,8 @@ public class Controller {
     }
     @GetMapping(path = "/getCopies")
     public List<BookCopies> getCopies(@RequestParam Integer bookId)  {
-        List<BookCopies> copyList = bookCopiesService.getBookCopies(bookId);
-        for (BookCopies copy: copyList
-             ) {
-            System.out.println("book copy Id: " + copy.getBookCopyId());
-            System.out.println("book copy Id: " + copy.isAvailable());
-        }
-        System.out.println(bookId);
-        return copyList;
+
+        return  bookCopiesService.getBookCopies(bookId);
     }
 
 }

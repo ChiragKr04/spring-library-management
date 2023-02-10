@@ -9,7 +9,7 @@ export class RestApiService {
     await axios
       .get(url, requestOptions)
       .then((result) => {
-        console.log(result);
+        //console.log(result);
         data = result;
       })
       .catch((error) => console.log("error[get]", error));

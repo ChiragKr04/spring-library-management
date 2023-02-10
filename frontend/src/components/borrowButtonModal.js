@@ -24,18 +24,18 @@ export default function BorrowButtonModal({ e }) {
   const [bookCopyList, setBookCopiesList] = React.useState([]);
   const handleOpen = () => {
     setOpen(true);
-    console.log("handleOpen");
+    //console.log("handleOpen");
     getCopies(e);
   };
   const handleClose = () => setOpen(false);
-  console.log(e);
+  //console.log(e);
   const getCopies = async (e) => {
     await RestApiService.get(
       `${ApiConstants.getBookCopies}?bookId=${e.id}`
     ).then((result) => {
       //setBookCopiesList(result["data"]);
       setBookCopiesList(result.data);
-      console.log(result.data);
+      //console.log(result.data);
     });
   };
 

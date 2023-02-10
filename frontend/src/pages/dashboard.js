@@ -281,9 +281,6 @@ export default function Dashboard() {
                   </div>
                 </CardActions>
               </Card>
-              {/* <borrowButtonModal title={e.title} open={borrow} handleClose={borrowClose} handleOpen={borrowClick}>
-
-</borrowButtonModal> */}
             </div>
           );
         })}

@@ -7,21 +7,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
-
-// function createData(name, calories, fat, carbs, protein) {
-//   return { name, calories, fat, carbs, protein };
-// }
-
-// const rows = [
-//   createData("#1"),
-//   createData("#2"),
-//   createData("#3"),
-//   createData("#4"),
-//   createData("#5"),
-// ];
+import ConfirmModal from "./ConfirmModal";
 
 export default function BookCopiesTable({ copyList }) {
-  //const [copyBookList, setBookCopiesList] = React.useState([]);
   return (
     <TableContainer component={Paper}>
       <Table /*sx={{ minWidth: 650 }}*/ aria-label="simple table">
@@ -41,7 +29,7 @@ export default function BookCopiesTable({ copyList }) {
                 {bookCopy.bookCopyId}
               </TableCell>
               <TableCell align="right">
-                <Button>Get Book</Button>
+                <ConfirmModal bookCopy={bookCopy} />
               </TableCell>
             </TableRow>
           ))}
