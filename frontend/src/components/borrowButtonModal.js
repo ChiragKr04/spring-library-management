@@ -19,16 +19,15 @@ const style = {
   p: 4,
 };
 
-export default function BorrowButtonModal({ e }) {
+export default function BorrowButtonModal({ e, userDetail }) {
   const [open, setOpen] = React.useState(false);
   const [bookCopyList, setBookCopiesList] = React.useState([]);
   const handleOpen = () => {
     setOpen(true);
-    //console.log("handleOpen");
     getCopies(e);
   };
   const handleClose = () => setOpen(false);
-  //console.log(e);
+
   const getCopies = async (e) => {
     await RestApiService.get(
       `${ApiConstants.getBookCopies}?bookId=${e.id}`
@@ -99,7 +98,7 @@ export default function BorrowButtonModal({ e }) {
               </Typography>
             </div>
           </div>
-          <BookCopiesTable copyList={bookCopyList} />
+          <BookCopiesTable copyList={bookCopyList} userDetail={userDetail} />
         </Box>
       </Modal>
     </div>

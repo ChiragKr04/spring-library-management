@@ -6,4 +6,5 @@ export class ApiConstants {
   static signup = `${this.mainUrl}/signUp`;
   static getBooks = `${this.mainUrl}/search`;
   static getBookCopies = `${this.mainUrl}/getCopies`;
+  static issueBookCopy = `${this.mainUrl}/issueBook`;
 }

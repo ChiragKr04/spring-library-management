@@ -3,7 +3,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-
+import { RestApiService } from "../util/RestApiService";
+import { ApiConstants } from "../util/ApiConstants";
 const style = {
   position: "absolute",
   top: "50%",
@@ -16,11 +17,25 @@ const style = {
   p: 4,
 };
 
-export default function ConfirmModal({ bookCopy }) {
+export default function ConfirmModal({ bookCopy, userDetail }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  //   console.log(bookCopy);
+  const confirm = async () => {
+    await RestApiService.post(
+      ApiConstants.issueBookCopy,
+      {
+        Authorization: "any-auth-token",
+      },
+      {
+        userId: userDetail.userId,
+        bookId: bookCopy.bookId,
+      }
+    ).then((result) => {
+      console.log(result.data);
+    });
+    handleClose();
+  };
   return (
     <div>
       <Button onClick={handleOpen}>Get Book</Button>
@@ -32,11 +47,17 @@ export default function ConfirmModal({ bookCopy }) {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
+            Do you want confirm your choice .... ?
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <Button onClick={confirm} style={{ marginLeft: "auto" }}>
+              Confirm
+            </Button>
+          </div>
         </Box>
       </Modal>
     </div>

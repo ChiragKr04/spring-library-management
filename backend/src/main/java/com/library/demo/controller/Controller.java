@@ -65,5 +65,10 @@ public class Controller {
 
         return  bookCopiesService.getBookCopies(bookId);
     }
+    @PostMapping(path = "/issueBook")
+    public String issueBookCopies(@RequestBody IssueBookPayload issueBookPayload){
+        System.out.println(issueBookPayload.getUserId());
+        return "success";
+    }
 
 }

@@ -12,6 +12,8 @@ public class UserBorrowHistory {
     @Id @GeneratedValue
     private Long userBorrowHistoryId;
     @NonNull
+    private Long userId;
+    @NonNull
     private String bookTitle;
     @NonNull
     private String bookId;
@@ -19,7 +21,15 @@ public class UserBorrowHistory {
     private String copyId;
     @NonNull
     private Date issueDate;
+
     @NonNull
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(@NonNull Long userId) {
+        this.userId = userId;
+    }
     private Date returnDate;
 
     public Long getUserBorrowHistoryId() {

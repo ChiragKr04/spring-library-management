@@ -27,7 +27,7 @@ public class PopulateBookService {
             for (int i=0; i < jsonArray.size(); i++){
                 Book book = new Book();
                 book.setImage(String.valueOf(((JSONObject)jsonArray.get(i)).get("image")));
-            book.setAuthor(String.valueOf(((JSONObject)jsonArray.get(i)).get("author")));
+                book.setAuthor(String.valueOf(((JSONObject)jsonArray.get(i)).get("author")));
                 book.setTitle(String.valueOf(((JSONObject)jsonArray.get(i)).get("name")));
                 book.setAvailable(true);
                 bookRepository.save(book);

@@ -269,7 +269,10 @@ export default function Dashboard() {
                       justifyContent: "space-between",
                     }}
                   >
-                    <BorrowButtonModal e={e} />
+                    <BorrowButtonModal
+                      e={e}
+                      userDetail={userDetails.userDetail.loginPayload}
+                    />
                     <Typography
                       color="text.secondary"
                       style={

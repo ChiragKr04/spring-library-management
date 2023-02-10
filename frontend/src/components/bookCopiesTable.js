@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import ConfirmModal from "./ConfirmModal";
 
-export default function BookCopiesTable({ copyList }) {
+export default function BookCopiesTable({ copyList, userDetail }) {
   return (
     <TableContainer component={Paper}>
       <Table /*sx={{ minWidth: 650 }}*/ aria-label="simple table">
@@ -29,7 +29,7 @@ export default function BookCopiesTable({ copyList }) {
                 {bookCopy.bookCopyId}
               </TableCell>
               <TableCell align="right">
-                <ConfirmModal bookCopy={bookCopy} />
+                <ConfirmModal bookCopy={bookCopy} userDetail={userDetail} />
               </TableCell>
             </TableRow>
           ))}
