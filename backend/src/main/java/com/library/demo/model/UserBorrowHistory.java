@@ -12,25 +12,47 @@ public class UserBorrowHistory {
     @Id @GeneratedValue
     private Long userBorrowHistoryId;
     @NonNull
-    private Long userId;
+    private String userId;
     @NonNull
     private String bookTitle;
     @NonNull
-    private String bookId;
+    private String author;
     @NonNull
-    private String copyId;
+    private boolean active;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    @NonNull
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(@NonNull String author) {
+        this.author = author;
+    }
+
+    @NonNull
+    private Long bookId;
+    @NonNull
+    private Long copyId;
     @NonNull
     private Date issueDate;
 
+    private Date returnDate;
     @NonNull
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(@NonNull Long userId) {
+    public void setUserId(@NonNull String userId) {
         this.userId = userId;
     }
-    private Date returnDate;
 
     public Long getUserBorrowHistoryId() {
         return userBorrowHistoryId;
@@ -50,20 +72,20 @@ public class UserBorrowHistory {
     }
 
     @NonNull
-    public String getBookId() {
+    public Long getBookId() {
         return bookId;
     }
 
-    public void setBookId(@NonNull String bookId) {
+    public void setBookId(@NonNull Long bookId) {
         this.bookId = bookId;
     }
 
     @NonNull
-    public String getCopyId() {
+    public Long getCopyId() {
         return copyId;
     }
 
-    public void setCopyId(@NonNull String copyId) {
+    public void setCopyId(@NonNull Long copyId) {
         this.copyId = copyId;
     }
 

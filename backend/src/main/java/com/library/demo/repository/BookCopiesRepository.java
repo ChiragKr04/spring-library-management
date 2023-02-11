@@ -11,4 +11,9 @@ import java.util.List;
 public interface BookCopiesRepository extends JpaRepository<BookCopies, Integer> {
     @Query(value = "select * from book_copies where book_id = ?1 and is_available=true", nativeQuery = true)
     List<BookCopies> findBookCopiesByBookIdAndAvailable(Long id);
+
+    @Query(value = "select count(*) from book_copies where book_id=?1 and is_available=true;", nativeQuery = true)
+    long checkForCopyAvailability(long bookId);
+
+    BookCopies findByBookCopyId(long bookCopyId);
 }

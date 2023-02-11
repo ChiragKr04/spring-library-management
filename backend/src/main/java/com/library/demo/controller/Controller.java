@@ -2,10 +2,8 @@ package com.library.demo.controller;
 
 import com.library.demo.demoData.PopulateBookService;
 import com.library.demo.model.*;
-import com.library.demo.service.BookCopiesService;
-import com.library.demo.service.BookService;
-import com.library.demo.service.LoginService;
-import com.library.demo.service.SignUpService;
+import com.library.demo.service.*;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +27,16 @@ public class Controller {
     PopulateBookService populateBookService;
     @Autowired
     BookCopiesService bookCopiesService;
+    final
+    IssueBookService issueBookService;
+    final
+    UserHistoryService userHistoryService;
+
+    public Controller(IssueBookService issueBookService
+            , UserHistoryService userHistoryService) {
+        this.issueBookService = issueBookService;
+        this.userHistoryService = userHistoryService;
+    }
 
     @PostMapping(path = "/signUp")
     public Response signUp(@RequestBody UserCredential userCredential){
@@ -66,9 +74,16 @@ public class Controller {
         return  bookCopiesService.getBookCopies(bookId);
     }
     @PostMapping(path = "/issueBook")
-    public String issueBookCopies(@RequestBody IssueBookPayload issueBookPayload){
-        System.out.println(issueBookPayload.getUserId());
-        return "success";
+    public Response issueBookCopies(@RequestBody IssueBookPayload issueBookPayload){
+//        System.out.println(issueBookPayload.getUserId());
+//        System.out.println(issueBookPayload.getBookId());
+//        System.out.println(issueBookPayload.getBookCopyId());
+        return issueBookService.issueBook(issueBookPayload);
+    }
+
+    @PostMapping(path = "/fetchUserHistory")
+    public List<UserBorrowHistory> fetchUserHistory(@RequestParam String userId) {
+        return userHistoryService.fetchUserHistory(userId);
     }
 
 }

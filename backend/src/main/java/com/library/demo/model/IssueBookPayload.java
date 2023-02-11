@@ -2,8 +2,17 @@ package com.library.demo.model;
 
 public class IssueBookPayload {
     private String userId;
-    private int bookId;
-    private int bookCopyId;
+    private long bookId;
+    private String title;
+    private long bookCopyId;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getUserId() {
         return userId;
@@ -13,19 +22,19 @@ public class IssueBookPayload {
         this.userId = userId;
     }
 
-    public int getBookId() {
+    public long getBookId() {
         return bookId;
     }
 
-    public void setBookId(int bookId) {
+    public void setBookId(long bookId) {
         this.bookId = bookId;
     }
 
-    public int getBookCopyId() {
+    public long getBookCopyId() {
         return bookCopyId;
     }
 
-    public void setBookCopyId(int bookCopyId) {
+    public void setBookCopyId(long bookCopyId) {
         this.bookCopyId = bookCopyId;
     }
 }

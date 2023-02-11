@@ -16,6 +16,37 @@ public class Book {
     private String author;
     @NonNull
     private boolean available;
+    @NonNull
+    private long rating;
+    @NonNull
+    private String genre;
+    @NonNull
+    private long price;
+
+    public long getRating() {
+        return rating;
+    }
+
+    public void setRating(long rating) {
+        this.rating = rating;
+    }
+
+    @NonNull
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(@NonNull String genre) {
+        this.genre = genre;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
+    }
 
     private String image;
 
