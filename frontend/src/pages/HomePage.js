@@ -1,6 +1,8 @@
-import { Card, CardActions, CardContent, Chip, Rating, Tooltip, Typography } from '@mui/material';
+import { AppBar, Box, Button, Card, CardActions, CardContent, Chip, IconButton, Rating, Toolbar, Tooltip, Typography } from '@mui/material';
+import { Stack } from '@mui/system';
 import React from 'react'
 import BorrowButtonModal from '../components/borrowButtonModal';
+import FilterPage from './FilterPage';
 
 export default function HomePage({ userDetails, bookData, setResponseOfBookIssueMethod }) {
 
@@ -14,6 +16,7 @@ export default function HomePage({ userDetails, bookData, setResponseOfBookIssue
           paddingLeft: "0",
         }}
       >
+        <FilterPage />
         {bookData?.map((e, i) => {
           return (
             <div key={i} style={{ margin: "15px", display: "flex" }}>

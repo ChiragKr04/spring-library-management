@@ -19,7 +19,7 @@ import { Home } from "@mui/icons-material";
 const menuItem = [
   { title: "Home", icon: <Home />, type: "home" },
   { title: "History", icon: <HistoryIcon />, type: "history" },
-  { title: "Filter", icon: <FilterAltIcon />, type: "filter" },
+  // { title: "Filter", icon: <FilterAltIcon />, type: "filter" },
   { title: "Logout", icon: <LogoutIcon />, type: "logout" },
 ];
 export default function MenuDrawer({ user, changeScreen }) {
@@ -31,8 +31,6 @@ export default function MenuDrawer({ user, changeScreen }) {
       changeScreen(0);
     } else if (choice == "History") {
       changeScreen(1);
-    } else if (choice == "Filter") {
-      changeScreen(2);
     }
   };
 
