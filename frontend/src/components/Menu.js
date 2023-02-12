@@ -15,21 +15,28 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import HistoryIcon from "@mui/icons-material/History";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { IconButton } from "@mui/material";
+import { Home } from "@mui/icons-material";
 const menuItem = [
-  { title: "Filter", icon: <FilterAltIcon />, type: "filter" },
+  { title: "Home", icon: <Home />, type: "home" },
   { title: "History", icon: <HistoryIcon />, type: "history" },
+  { title: "Filter", icon: <FilterAltIcon />, type: "filter" },
   { title: "Logout", icon: <LogoutIcon />, type: "logout" },
 ];
-export default function MenuDrawer(user) {
+export default function MenuDrawer({ user, changeScreen }) {
   const [state, setState] = React.useState({
     left: false,
   });
   const menuOption = (choice) => {
-    //  console.log(choice);
+    if (choice == "Home") {
+      changeScreen(0);
+    } else if (choice == "History") {
+      changeScreen(1);
+    } else if (choice == "Filter") {
+      changeScreen(2);
+    }
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
-    console.log(event);
     if (
       event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
@@ -52,7 +59,7 @@ export default function MenuDrawer(user) {
       <List>
         {menuItem.map((element, index) => (
           <ListItem key={element.type} disablePadding>
-            <ListItemButton onClick={menuOption(element.title)}>
+            <ListItemButton onClick={() => { menuOption(element.title); }}>
               <ListItemIcon>{element.icon}</ListItemIcon>
               <ListItemText primary={element.title} />
             </ListItemButton>

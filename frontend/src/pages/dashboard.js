@@ -16,7 +16,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Chip, Fab, Popover, Rating, Tooltip } from "@mui/material";
+import { Chip, CircularProgress, circularProgressClasses, Fab, Popover, Rating, Tooltip } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HistoryIcon from "@mui/icons-material/History";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -26,12 +26,11 @@ import { useHistory } from "react-router-dom";
 import BorrowButtonModal from "../components/borrowButtonModal";
 import AlertStatus from "../components/alertStatus";
 import MenuDrawer from "../components/Menu";
+import HomePage from "./HomePage";
+import HistoryPage from "./HistoryPage";
+import FilterPage from "./FilterPage";
 
-const menuItem = [
-  { title: "Filter", icon: <FilterAltIcon />, type: "filter" },
-  { title: "History", icon: <HistoryIcon />, type: "history" },
-  { title: "Logout", icon: <LogoutIcon />, type: "logout" },
-];
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -87,10 +86,17 @@ export default function Dashboard() {
   const [listData, setListData] = React.useState([]);
   const [popOver, setPopOver] = React.useState(false);
   const [responseOfBookIssue, setResponseOfBookIssue] = React.useState("");
+  const [currentPage, setCurrentPage] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const setResponseOfBookIssueMethod = (response) => {
     setResponseOfBookIssue(response);
     //console.log(responseOfBookIssue);
   };
+
+  const changePage = (pageIdx) => {
+    setCurrentPage(pageIdx);
+  }
 
   //menu popOver
   // const handleClick = (event) => {
@@ -105,8 +111,9 @@ export default function Dashboard() {
   // const open = Boolean(popOver);
   // const id = open ? "simple-popover" : undefined;
   const searchBooks = async (e) => {
-    if (e.target.value.length > 2) {
+    if (e.target.value.length >= 1) {
       //console.log(e.target.value);
+      setIsLoading(true);
       await RestApiService.post(
         ApiConstants.getBooks,
         {
@@ -117,23 +124,35 @@ export default function Dashboard() {
         }
       ).then((result) => {
         setListData(result["data"]);
-        // console.log(listData);
+        setIsLoading(false);
       });
+    } else {
+      getAllBooks();
     }
   };
 
-  const handleButton = (type) => {
-    if (type === "filter") {
-      console.log("filter");
+  const getAllBooks = async () => {
+    setIsLoading(true);
+    await RestApiService.post(
+      ApiConstants.getBooks,
+      {
+        Authorization: "any-auth-token",
+      },
+      {
+        search: "all",
+      }
+    ).then((result) => {
+      setListData(result["data"]);
+      setIsLoading(false);
+    });
+  }
+
+
+  React.useEffect(() => {
+    if (listData.length == 0) {
+      getAllBooks();
     }
-    if (type === "history") {
-      setListData(null);
-      console.log("history");
-    }
-    if (type === "logout") {
-      console.log("logout");
-    }
-  };
+  }, []);
 
   return (
     <Box
@@ -148,7 +167,7 @@ export default function Dashboard() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            <MenuDrawer user={userDetails.userDetail.loginPayload} />
+            <MenuDrawer user={userDetails.userDetail.loginPayload} changeScreen={changePage} />
             {/* <IconButton aria-label="menu" onClick={handleClick}>
               <MenuIcon style={{ color: "white" }} />
             </IconButton>
@@ -198,110 +217,32 @@ export default function Dashboard() {
           responseMethod={setResponseOfBookIssueMethod}
         />
       )}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
-          paddingLeft: "0",
-        }}
-      >
-        {listData?.map((e, i) => {
-          return (
-            <div key={i} style={{ margin: "15px", display: "flex" }}>
-              <Card
-                elevation={0}
-                className="Bookcard"
-                key={e.id}
-                style={{ width: "180px" }}
-              >
-                <CardContent /*style={{ height: "95px" }}*/>
-                  <img
-                    className="imgBook"
-                    alt={e.title}
-                    src={e.image}
-                    style={{ width: "144px", height: "168px" }}
-                  ></img>
-                  <Typography
-                    sx={{ fontSize: 14 }}
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    <Tooltip title={e.author} placement="top-start">
-                      <span
-                        style={{
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
-                          width: "180px",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {e.author}
-                      </span>
-                    </Tooltip>
-                  </Typography>
-
-                  <Typography sx={{ fontWeight: 640 }} component="div">
-                    <Tooltip /*title={e.title}*/ placement="bottom-start">
-                      <Typography
-                        style={{
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
-                          width: "150px",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {e.title}
-                      </Typography>
-                    </Tooltip>
-                  </Typography>
-                  <Rating
-                    name="half-rating-read"
-                    defaultValue={e.rating}
-                    precision={0.5}
-                    readOnly
-                  />
-                  <Chip
-                    label={e.genre}
-                    style={{
-                      height: "2%",
-                      backgroundColor: "#D61355",
-                      color: "white",
-                    }}
-                  />
-                </CardContent>
-                <CardActions style={{ position: "relative" /*bottom: "0%"*/ }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <BorrowButtonModal
-                      e={e}
-                      userDetail={userDetails.userDetail.loginPayload}
-                      setResponseOfBookIssueMethod={
-                        setResponseOfBookIssueMethod
-                      }
-                    />
-                    <Typography
-                      color="text.secondary"
-                      fontSize={12}
-                      style={
-                        e.available ? { color: "green" } : { color: "red" }
-                      }
-                    >
-                      {e.available ? "Available" : "Not Available"}
-                    </Typography>
-                  </div>
-                </CardActions>
-              </Card>
-            </div>
-          );
-        })}
-      </div>
+      {
+        currentPage == 0
+          ? (isLoading ?
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+              <CircularProgress
+                variant="indeterminate"
+                disableShrink
+                sx={{
+                  color: (theme) => (theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8'),
+                  animationDuration: '550ms',
+                  [`& .${circularProgressClasses.circle}`]: {
+                    strokeLinecap: 'round',
+                  },
+                }}
+                size={40}
+                thickness={4}
+              />
+            </Box>
+            : (<HomePage
+              bookData={listData}
+              userDetails={userDetails.userDetail.loginPayload}
+            />))
+          : currentPage == 1
+            ? (<HistoryPage />)
+            : <FilterPage />
+      }
     </Box>
   );
 }
