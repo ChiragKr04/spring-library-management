@@ -19,7 +19,11 @@ const style = {
   p: 4,
 };
 
-export default function BorrowButtonModal({ e, userDetail }) {
+export default function BorrowButtonModal({
+  e,
+  userDetail,
+  setResponseOfBookIssueMethod,
+}) {
   const [open, setOpen] = React.useState(false);
   const [bookCopyList, setBookCopiesList] = React.useState([]);
   const handleOpen = () => {
@@ -60,7 +64,7 @@ export default function BorrowButtonModal({ e, userDetail }) {
             <img
               alt={e.title}
               src={e.image}
-              style={{ width: "60px", height: "70px" }}
+              style={{ width: "100px", height: "120px" }}
             ></img>
             <div id="bookInfo">
               <Typography
@@ -98,7 +102,12 @@ export default function BorrowButtonModal({ e, userDetail }) {
               </Typography>
             </div>
           </div>
-          <BookCopiesTable copyList={bookCopyList} userDetail={userDetail} />
+          <BookCopiesTable
+            copyList={bookCopyList}
+            userDetail={userDetail}
+            closingModal={handleClose}
+            setResponseOfBookIssueMethod={setResponseOfBookIssueMethod}
+          />
         </Box>
       </Modal>
     </div>

@@ -56,6 +56,10 @@ public class Controller {
     }
     @PostMapping(path = "/search")
     public List<Book> getBook(@RequestBody SearchBooks search){
+        System.out.println(search.getSearch().toLowerCase());
+        if (search.getSearch().toLowerCase().equals("all")){
+            return bookService.getAllBooks();
+        }
         return bookService.fetchBook(search);
     }
 

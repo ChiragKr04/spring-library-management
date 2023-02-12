@@ -17,17 +17,17 @@ public class Book {
     @NonNull
     private boolean available;
     @NonNull
-    private long rating;
+    private double rating;
     @NonNull
     private String genre;
     @NonNull
-    private long price;
+    private Double price;
 
-    public long getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(long rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
@@ -40,11 +40,11 @@ public class Book {
         this.genre = genre;
     }
 
-    public long getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

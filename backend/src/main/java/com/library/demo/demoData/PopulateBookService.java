@@ -20,6 +20,9 @@ public class PopulateBookService {
     @Autowired
     BookRepository bookRepository;
     public String PopulateBook() throws FileNotFoundException {
+        if (!bookRepository.findAll().isEmpty()){
+            return "database already populated";
+        }
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader("csvjson.json"));
@@ -29,6 +32,9 @@ public class PopulateBookService {
                 book.setImage(String.valueOf(((JSONObject)jsonArray.get(i)).get("image")));
                 book.setAuthor(String.valueOf(((JSONObject)jsonArray.get(i)).get("author")));
                 book.setTitle(String.valueOf(((JSONObject)jsonArray.get(i)).get("name")));
+                book.setGenre(String.valueOf(((JSONObject)jsonArray.get(i)).get("category")));
+                book.setRating(Double.valueOf(String.valueOf(((JSONObject)jsonArray.get(i)).get("book_depository_stars"))));
+                book.setPrice(Double.valueOf (String.valueOf (((JSONObject)jsonArray.get(i)).get("price"))));
                 book.setAvailable(true);
                 bookRepository.save(book);
             }

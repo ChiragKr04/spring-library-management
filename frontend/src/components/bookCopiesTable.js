@@ -6,10 +6,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button } from "@mui/material";
 import ConfirmModal from "./ConfirmModal";
 
-export default function BookCopiesTable({ copyList, userDetail }) {
+export default function BookCopiesTable({
+  copyList,
+  userDetail,
+  closingModal,
+  setResponseOfBookIssueMethod,
+}) {
   return (
     <TableContainer component={Paper}>
       <Table /*sx={{ minWidth: 650 }}*/ aria-label="simple table">
@@ -22,14 +26,19 @@ export default function BookCopiesTable({ copyList, userDetail }) {
         <TableBody>
           {copyList.map((bookCopy) => (
             <TableRow
-              key={bookCopy.id}
+              key={bookCopy.bookCopyId}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" key={bookCopy.id}>
                 {bookCopy.bookCopyId}
               </TableCell>
-              <TableCell align="right">
-                <ConfirmModal bookCopy={bookCopy} userDetail={userDetail} />
+              <TableCell align="right" key={bookCopy.id}>
+                <ConfirmModal
+                  bookCopy={bookCopy}
+                  userDetail={userDetail}
+                  closingModal={closingModal}
+                  setResponseOfBookIssueMethod={setResponseOfBookIssueMethod}
+                />
               </TableCell>
             </TableRow>
           ))}

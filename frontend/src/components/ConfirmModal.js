@@ -5,6 +5,9 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { RestApiService } from "../util/RestApiService";
 import { ApiConstants } from "../util/ApiConstants";
+import { Alert, Snackbar } from "@mui/material";
+import { toast } from "react-toastify";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -17,10 +20,20 @@ const style = {
   p: 4,
 };
 
-export default function ConfirmModal({ bookCopy, userDetail }) {
+export default function ConfirmModal({
+  bookCopy,
+  userDetail,
+  closingModal,
+  setResponseOfBookIssueMethod,
+}) {
   const [open, setOpen] = React.useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const cancel = () => {
+    handleClose();
+    closingModal();
+  };
   const confirm = async () => {
     await RestApiService.post(
       ApiConstants.issueBookCopy,
@@ -30,11 +43,14 @@ export default function ConfirmModal({ bookCopy, userDetail }) {
       {
         userId: userDetail.userId,
         bookId: bookCopy.bookId,
+        bookCopyId: bookCopy.bookCopyId,
       }
     ).then((result) => {
-      console.log(result.data);
+      // console.log(result.data);
+      setResponseOfBookIssueMethod(result.data);
     });
     handleClose();
+    closingModal();
   };
   return (
     <div>
@@ -52,9 +68,18 @@ export default function ConfirmModal({ bookCopy, userDetail }) {
           <div
             style={{
               display: "flex",
+              marginTop: "10px",
             }}
           >
-            <Button onClick={confirm} style={{ marginLeft: "auto" }}>
+            <Button variant="contained" color="error" onClick={cancel}>
+              Cancel
+            </Button>
+            <Button
+              color="success"
+              variant="contained"
+              onClick={confirm}
+              style={{ marginLeft: "auto" }}
+            >
               Confirm
             </Button>
           </div>

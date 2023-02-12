@@ -16,7 +16,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Popover, Tooltip } from "@mui/material";
+import { Chip, Fab, Popover, Rating, Tooltip } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HistoryIcon from "@mui/icons-material/History";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -24,6 +24,8 @@ import borrowButtonModal from "../components/borrowButtonModal";
 import { color } from "@mui/system";
 import { useHistory } from "react-router-dom";
 import BorrowButtonModal from "../components/borrowButtonModal";
+import AlertStatus from "../components/alertStatus";
+import MenuDrawer from "../components/Menu";
 
 const menuItem = [
   { title: "Filter", icon: <FilterAltIcon />, type: "filter" },
@@ -84,34 +86,24 @@ export default function Dashboard() {
   const userDetails = useAuthState();
   const [listData, setListData] = React.useState([]);
   const [popOver, setPopOver] = React.useState(false);
-  const [borrow, setBorrow] = React.useState(true);
-  const [bookCopyData, setBookCopyData] = React.useState();
-  const history = useHistory();
-
-  //Borrow book copies popOver
-  const borrowClick = (data) => {
-    console.log(data.title);
-    setBookCopyData(data);
-    //setBorrow(true)
-    //history.push("/dashboard/book/"+id)
-  };
-
-  const borrowClose = (event) => {
-    setBorrow(null);
+  const [responseOfBookIssue, setResponseOfBookIssue] = React.useState("");
+  const setResponseOfBookIssueMethod = (response) => {
+    setResponseOfBookIssue(response);
+    //console.log(responseOfBookIssue);
   };
 
   //menu popOver
-  const handleClick = (event) => {
-    console.log(event.currentTarget);
-    setPopOver(event.currentTarget);
-  };
+  // const handleClick = (event) => {
+  //   console.log(event.currentTarget);
+  //   setPopOver(event.currentTarget);
+  // };
 
-  const handleClose = () => {
-    setPopOver(null);
-  };
+  // const handleClose = () => {
+  //   setPopOver(null);
+  // };
 
-  const open = Boolean(popOver);
-  const id = open ? "simple-popover" : undefined;
+  // const open = Boolean(popOver);
+  // const id = open ? "simple-popover" : undefined;
   const searchBooks = async (e) => {
     if (e.target.value.length > 2) {
       //console.log(e.target.value);
@@ -146,7 +138,7 @@ export default function Dashboard() {
   return (
     <Box
       sx={{ flexGrow: 1 }}
-      style={{ backgroundColor: "gainsboro", height: "100%" }}
+      style={{ /*backgroundColor: "gainsboro",*/ height: "100%" }}
     >
       <AppBar position="static">
         <Toolbar style={{ display: "flex", alignItems: "center" }}>
@@ -156,7 +148,8 @@ export default function Dashboard() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            <IconButton aria-label="menu" onClick={handleClick}>
+            <MenuDrawer user={userDetails.userDetail.loginPayload} />
+            {/* <IconButton aria-label="menu" onClick={handleClick}>
               <MenuIcon style={{ color: "white" }} />
             </IconButton>
             <Popover
@@ -182,7 +175,7 @@ export default function Dashboard() {
                   </div>
                 );
               })}
-            </Popover>
+            </Popover> */}
             Hi {userDetails.userDetail.loginPayload.firstname}&nbsp;
             {userDetails.userDetail.loginPayload.lastname}
           </Typography>
@@ -198,6 +191,13 @@ export default function Dashboard() {
           </Search>
         </Toolbar>
       </AppBar>
+
+      {responseOfBookIssue && (
+        <AlertStatus
+          response={responseOfBookIssue}
+          responseMethod={setResponseOfBookIssueMethod}
+        />
+      )}
       <div
         style={{
           display: "flex",
@@ -209,58 +209,68 @@ export default function Dashboard() {
         {listData?.map((e, i) => {
           return (
             <div key={i} style={{ margin: "15px", display: "flex" }}>
-              <Card key={e.id} style={{ width: "635px" }}>
-                <CardContent style={{ height: "95px" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                      alignItems: "center",
-                    }}
+              <Card
+                elevation={0}
+                className="Bookcard"
+                key={e.id}
+                style={{ width: "180px" }}
+              >
+                <CardContent /*style={{ height: "95px" }}*/>
+                  <img
+                    className="imgBook"
+                    alt={e.title}
+                    src={e.image}
+                    style={{ width: "144px", height: "168px" }}
+                  ></img>
+                  <Typography
+                    sx={{ fontSize: 14 }}
+                    color="text.secondary"
+                    gutterBottom
                   >
-                    <img
-                      alt={e.title}
-                      src={e.image}
-                      style={{ width: "60px", height: "70px" }}
-                    ></img>
-                    <div id="bookInfo">
-                      <Typography
-                        sx={{ fontSize: 14 }}
-                        color="text.secondary"
-                        gutterBottom
+                    <Tooltip title={e.author} placement="top-start">
+                      <span
+                        style={{
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                          width: "180px",
+                          whiteSpace: "nowrap",
+                        }}
                       >
-                        <Tooltip title={e.author} placement="top-start">
-                          <span
-                            style={{
-                              textOverflow: "ellipsis",
-                              overflow: "hidden",
-                              width: "180px",
-                              whiteSpace: "nowrap",
-                            }}
-                          >
-                            {e.author}
-                          </span>
-                        </Tooltip>
-                      </Typography>
+                        {e.author}
+                      </span>
+                    </Tooltip>
+                  </Typography>
 
-                      <Typography variant="h6" component="div">
-                        <Tooltip title={e.title} placement="bottom-start">
-                          <span
-                          // style={{
-                          //   textOverflow: "ellipsis",
-                          //   overflow: "hidden",
-                          //   width: "250px",
-                          //   whiteSpace: "nowrap"
-                          // }}
-                          >
-                            {e.title}
-                          </span>
-                        </Tooltip>
+                  <Typography sx={{ fontWeight: 640 }} component="div">
+                    <Tooltip /*title={e.title}*/ placement="bottom-start">
+                      <Typography
+                        style={{
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                          width: "150px",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {e.title}
                       </Typography>
-                    </div>
-                  </div>
+                    </Tooltip>
+                  </Typography>
+                  <Rating
+                    name="half-rating-read"
+                    defaultValue={e.rating}
+                    precision={0.5}
+                    readOnly
+                  />
+                  <Chip
+                    label={e.genre}
+                    style={{
+                      height: "2%",
+                      backgroundColor: "#D61355",
+                      color: "white",
+                    }}
+                  />
                 </CardContent>
-                <CardActions>
+                <CardActions style={{ position: "relative" /*bottom: "0%"*/ }}>
                   <div
                     style={{
                       display: "flex",
@@ -272,9 +282,13 @@ export default function Dashboard() {
                     <BorrowButtonModal
                       e={e}
                       userDetail={userDetails.userDetail.loginPayload}
+                      setResponseOfBookIssueMethod={
+                        setResponseOfBookIssueMethod
+                      }
                     />
                     <Typography
                       color="text.secondary"
+                      fontSize={12}
                       style={
                         e.available ? { color: "green" } : { color: "red" }
                       }
