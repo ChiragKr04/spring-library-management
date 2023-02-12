@@ -198,7 +198,7 @@ export default function Dashboard() {
             Hi {userDetails.userDetail.loginPayload.firstname}&nbsp;
             {userDetails.userDetail.loginPayload.lastname}
           </Typography>
-          <Search>
+          {currentPage == 0 ? (<Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -207,7 +207,7 @@ export default function Dashboard() {
               onChange={(e) => searchBooks(e)}
               inputProps={{ "aria-label": "search" }}
             />
-          </Search>
+          </Search>) : <div></div>}
         </Toolbar>
       </AppBar>
 
@@ -238,9 +238,10 @@ export default function Dashboard() {
             : (<HomePage
               bookData={listData}
               userDetails={userDetails.userDetail.loginPayload}
+              setResponseOfBookIssueMethod={setResponseOfBookIssueMethod}
             />))
           : currentPage == 1
-            ? (<HistoryPage />)
+            ? (<HistoryPage userDetails={userDetails.userDetail.loginPayload} />)
             : <FilterPage />
       }
     </Box>

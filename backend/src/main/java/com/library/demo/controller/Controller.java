@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -86,7 +87,7 @@ public class Controller {
     }
 
     @PostMapping(path = "/fetchUserHistory")
-    public List<UserBorrowHistory> fetchUserHistory(@RequestParam String userId) {
+    public List<UserBorrowBookFullData> fetchUserHistory(@RequestParam String userId) {
         return userHistoryService.fetchUserHistory(userId);
     }
 

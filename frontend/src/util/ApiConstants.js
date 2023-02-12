@@ -7,4 +7,5 @@ export class ApiConstants {
   static getBooks = `${this.mainUrl}/search`;
   static getBookCopies = `${this.mainUrl}/getCopies`;
   static issueBookCopy = `${this.mainUrl}/issueBook`;
+  static fetchUserHistory = `${this.mainUrl}/fetchUserHistory`;
 }
