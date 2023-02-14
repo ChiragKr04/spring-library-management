@@ -6,6 +6,27 @@ import java.util.Date;
 public class UserBorrowBookFullData{
     private BigInteger userBorrowHistoryId;
 
+    @Override
+    public String toString() {
+        return "UserBorrowBookFullData{" +
+                "userBorrowHistoryId=" + userBorrowHistoryId +
+                ", bookId=" + bookId +
+                ", issueDate=" + issueDate +
+                ", userId='" + userId + '\'' +
+                ", copyId='" + copyId + '\'' +
+                ", returnDate=" + returnDate +
+                ", active=" + active +
+                ", author='" + author + '\'' +
+                ", available=" + available +
+                ", image='" + image + '\'' +
+                ", title='" + title + '\'' +
+                ", rating=" + rating +
+                ", price=" + price +
+                ", genre='" + genre + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
     public UserBorrowBookFullData(
             BigInteger userBorrowHistoryId,
             BigInteger bookId,

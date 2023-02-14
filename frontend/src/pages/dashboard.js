@@ -16,7 +16,15 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Chip, CircularProgress, circularProgressClasses, Fab, Popover, Rating, Tooltip } from "@mui/material";
+import {
+  Chip,
+  CircularProgress,
+  circularProgressClasses,
+  Fab,
+  Popover,
+  Rating,
+  Tooltip,
+} from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HistoryIcon from "@mui/icons-material/History";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -29,7 +37,6 @@ import MenuDrawer from "../components/Menu";
 import HomePage from "./HomePage";
 import HistoryPage from "./HistoryPage";
 import FilterPage from "./FilterPage";
-
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -96,7 +103,7 @@ export default function Dashboard() {
 
   const changePage = (pageIdx) => {
     setCurrentPage(pageIdx);
-  }
+  };
 
   //menu popOver
   // const handleClick = (event) => {
@@ -145,8 +152,7 @@ export default function Dashboard() {
       setListData(result["data"]);
       setIsLoading(false);
     });
-  }
-
+  };
 
   React.useEffect(() => {
     if (listData.length == 0) {
@@ -167,7 +173,10 @@ export default function Dashboard() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            <MenuDrawer user={userDetails.userDetail.loginPayload} changeScreen={changePage} />
+            <MenuDrawer
+              user={userDetails.userDetail.loginPayload}
+              changeScreen={changePage}
+            />
             {/* <IconButton aria-label="menu" onClick={handleClick}>
               <MenuIcon style={{ color: "white" }} />
             </IconButton>
@@ -198,52 +207,65 @@ export default function Dashboard() {
             Hi {userDetails.userDetail.loginPayload.firstname}&nbsp;
             {userDetails.userDetail.loginPayload.lastname}
           </Typography>
-          {currentPage == 0 ? (<Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search Books"
-              onChange={(e) => searchBooks(e)}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>) : <div></div>}
+          {currentPage == 0 ? (
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search Books"
+                onChange={(e) => searchBooks(e)}
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Search>
+          ) : (
+            <div></div>
+          )}
         </Toolbar>
       </AppBar>
-
       {responseOfBookIssue && (
         <AlertStatus
           response={responseOfBookIssue}
           responseMethod={setResponseOfBookIssueMethod}
         />
       )}
-      {
-        currentPage == 0
-          ? (isLoading ?
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-              <CircularProgress
-                variant="indeterminate"
-                disableShrink
-                sx={{
-                  color: (theme) => (theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8'),
-                  animationDuration: '550ms',
-                  [`& .${circularProgressClasses.circle}`]: {
-                    strokeLinecap: 'round',
-                  },
-                }}
-                size={40}
-                thickness={4}
-              />
-            </Box>
-            : (<HomePage
-              bookData={listData}
-              userDetails={userDetails.userDetail.loginPayload}
-              setResponseOfBookIssueMethod={setResponseOfBookIssueMethod}
-            />))
-          : currentPage == 1
-            ? (<HistoryPage userDetails={userDetails.userDetail.loginPayload} />)
-            : <FilterPage />
-      }
+      {currentPage == 0 ? (
+        isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <CircularProgress
+              variant="indeterminate"
+              disableShrink
+              sx={{
+                color: (theme) =>
+                  theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
+                animationDuration: "550ms",
+                [`& .${circularProgressClasses.circle}`]: {
+                  strokeLinecap: "round",
+                },
+              }}
+              size={40}
+              thickness={4}
+            />
+          </Box>
+        ) : (
+          <HomePage
+            bookData={listData}
+            userDetails={userDetails.userDetail.loginPayload}
+            setResponseOfBookIssueMethod={setResponseOfBookIssueMethod}
+          />
+        )
+      ) : currentPage === 1 ? (
+        <HistoryPage userDetails={userDetails.userDetail.loginPayload} />
+      ) : (
+        <FilterPage />
+      )}
     </Box>
   );
 }

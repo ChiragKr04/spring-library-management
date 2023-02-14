@@ -87,7 +87,7 @@ public class Controller {
     }
 
     @PostMapping(path = "/fetchUserHistory")
-    public List<UserBorrowBookFullData> fetchUserHistory(@RequestParam String userId) {
+    public List<Object> fetchUserHistory(@RequestParam String userId) {
         return userHistoryService.fetchUserHistory(userId);
     }
 

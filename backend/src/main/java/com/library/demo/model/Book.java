@@ -22,6 +22,19 @@ public class Book {
     private String genre;
     @NonNull
     private Double price;
+    private String description;
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Double getRating() {
         return rating;

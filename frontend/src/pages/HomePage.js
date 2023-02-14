@@ -1,11 +1,27 @@
-import { AppBar, Box, Button, Card, CardActions, CardContent, Chip, IconButton, Rating, Toolbar, Tooltip, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
-import React from 'react'
-import BorrowButtonModal from '../components/borrowButtonModal';
-import FilterPage from './FilterPage';
+import {
+  AppBar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Chip,
+  IconButton,
+  Rating,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { Stack } from "@mui/system";
+import React from "react";
+import BorrowButtonModal from "../components/borrowButtonModal";
+import FilterPage from "./FilterPage";
 
-export default function HomePage({ userDetails, bookData, setResponseOfBookIssueMethod }) {
-
+export default function HomePage({
+  userDetails,
+  bookData,
+  setResponseOfBookIssueMethod,
+}) {
   return (
     <div>
       <div
@@ -16,7 +32,7 @@ export default function HomePage({ userDetails, bookData, setResponseOfBookIssue
           paddingLeft: "0",
         }}
       >
-        <FilterPage />
+        {/* <FilterPage /> */}
         {bookData?.map((e, i) => {
           return (
             <div key={i} style={{ margin: "15px", display: "flex" }}>
@@ -26,9 +42,11 @@ export default function HomePage({ userDetails, bookData, setResponseOfBookIssue
                 key={e.id}
                 style={{ width: "180px" }}
               >
-                <CardContent style={{
-                  paddingBottom: "0px"
-                }}>
+                <CardContent
+                  style={{
+                    paddingBottom: "0px",
+                  }}
+                >
                   <img
                     className="imgBook"
                     alt={e.title}
@@ -114,6 +132,7 @@ export default function HomePage({ userDetails, bookData, setResponseOfBookIssue
           );
         })}
       </div>
+      <h1>{bookData.length == 0 ? "No result Found." : ""}</h1>
     </div>
-  )
+  );
 }
