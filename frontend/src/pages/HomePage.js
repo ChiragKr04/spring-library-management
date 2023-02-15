@@ -21,7 +21,12 @@ export default function HomePage({
   userDetails,
   bookData,
   setResponseOfBookIssueMethod,
+  changeBookDataOnFilter,
+  setDataOnClearFilter,
 }) {
+
+  const bookDataCopy = [...bookData];
+
   return (
     <div>
       <div
@@ -32,7 +37,12 @@ export default function HomePage({
           paddingLeft: "0",
         }}
       >
-        {/* <FilterPage /> */}
+        <FilterPage
+          mainBookData={bookData}
+          bookDataCopy={bookDataCopy}
+          changeBookDataOnFilter={changeBookDataOnFilter}
+          setDataOnClearFilter={setDataOnClearFilter}
+        />
         {bookData?.map((e, i) => {
           return (
             <div key={i} style={{ margin: "15px", display: "flex" }}>

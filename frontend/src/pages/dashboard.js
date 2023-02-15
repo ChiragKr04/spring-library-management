@@ -90,6 +90,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function Dashboard() {
   const userDetails = useAuthState();
+  const [mainBookData, setMainBookData] = React.useState([]);
   const [listData, setListData] = React.useState([]);
   const [popOver, setPopOver] = React.useState(false);
   const [responseOfBookIssue, setResponseOfBookIssue] = React.useState("");
@@ -131,6 +132,7 @@ export default function Dashboard() {
         }
       ).then((result) => {
         setListData(result["data"]);
+        setMainBookData(result["data"]);
         setIsLoading(false);
       });
     } else {
@@ -150,9 +152,20 @@ export default function Dashboard() {
       }
     ).then((result) => {
       setListData(result["data"]);
+      setMainBookData(result["data"]);
       setIsLoading(false);
     });
   };
+
+  const changeBookDataOnFilter = (newBookData) => {
+    console.log("changeBookDataOnFilter");
+    console.log(newBookData);
+    setListData(newBookData);
+  }
+
+  const setDataOnClearFilter = () => {
+    setListData(mainBookData);
+  }
 
   React.useEffect(() => {
     if (listData.length == 0) {
@@ -259,6 +272,8 @@ export default function Dashboard() {
             bookData={listData}
             userDetails={userDetails.userDetail.loginPayload}
             setResponseOfBookIssueMethod={setResponseOfBookIssueMethod}
+            changeBookDataOnFilter={changeBookDataOnFilter}
+            setDataOnClearFilter={setDataOnClearFilter}
           />
         )
       ) : currentPage === 1 ? (

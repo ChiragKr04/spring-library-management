@@ -14,12 +14,12 @@ import { RestApiService } from "../util/RestApiService";
 
 export default function HistoryPage({ userDetails }) {
   const options = {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
   };
 
   const [allBorrowedBooks, setAllBorrowedBooks] = React.useState([]);
@@ -139,7 +139,7 @@ export default function HistoryPage({ userDetails }) {
                       sx={{ fontWeight: "500", color: "green" }}
                       component="div"
                     >
-                      {new Date(borrowBook.issue_date).toLocaleString("en-IE")}
+                      {new Date(borrowBook.issue_date).toLocaleString('en-US', options)}
                     </Typography>
                   </Box>
                   <Box pt={2} pl={2}>

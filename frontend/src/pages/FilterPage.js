@@ -1,11 +1,17 @@
 import { Close, Filter1, FilterAlt, Search } from '@mui/icons-material';
-import { Button, Card, Grid, MenuItem, TextField } from '@mui/material'
+import { Button, Card, Grid, IconButton, MenuItem, TextField } from '@mui/material'
 import { Box } from '@mui/system';
 import React from 'react'
 
-export default function FilterPage() {
-  const [categoryText, setCategoryText] = React.useState();
-  const [ratingText, setRatingText] = React.useState();
+export default function FilterPage({
+  mainBookData,
+  bookDataCopy,
+  changeBookDataOnFilter,
+  setDataOnClearFilter,
+}) {
+  const [categoryText, setCategoryText] = React.useState("all");
+  const [ratingText, setRatingText] = React.useState("none");
+  const [isFilterEnable, setFilterEnable] = React.useState(false);
 
 
   const ratingValue = [
@@ -31,17 +37,50 @@ export default function FilterPage() {
     },
   ];
 
-  const callFilterApi = async () => {
+  const doFiltering = async () => {
     console.log(`category text you typed ${categoryText}`);
     console.log(`rating you selected ${ratingText}`);
+
+    bookDataCopy = bookDataCopy.filter((item) => {
+      const selectedGenre =
+        categoryText.toLowerCase === "all" || categoryText === ""
+          ? "none"
+          : categoryText;
+      const selectedRating =
+        ratingText === "none" || ratingText === ""
+          ? "none"
+          : parseInt(ratingText)
+      if ((selectedGenre === "none" || item.genre === selectedGenre)
+        && (selectedRating === "none" || item.rating >= selectedRating)) {
+        return true;
+      }
+      return false;
+    });
+    changeBookDataOnFilter(bookDataCopy);
   }
 
   const clearFilters = async () => {
     setCategoryText("");
-    setRatingText("");
+    setRatingText("none");
+    setFilterEnable(false);
+    setDataOnClearFilter();
   }
 
-  return (
+  return !isFilterEnable ? (
+    <div style={{
+      display: "flex",
+      justifyContent: "end",
+      width: "100%",
+      paddingTop: "10px",
+      paddingRight: '10px',
+    }}>
+      <IconButton onClick={(e) => {
+        setFilterEnable(true);
+      }}>
+        <FilterAlt />
+      </IconButton>
+    </div>
+  ) : (
     <div style={{
       width: "100%",
       alignContent: "center"
@@ -105,7 +144,7 @@ export default function FilterPage() {
             <Button
               variant='contained'
               onClick={() => {
-                callFilterApi();
+                doFiltering();
               }}
               startIcon={<Search />}
             >
@@ -116,6 +155,7 @@ export default function FilterPage() {
             <Button
               variant='outlined'
               startIcon={<Close />}
+              onClick={clearFilters}
             >
               Clear Filter
             </Button>
