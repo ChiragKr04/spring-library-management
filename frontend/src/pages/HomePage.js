@@ -24,11 +24,10 @@ export default function HomePage({
   changeBookDataOnFilter,
   setDataOnClearFilter,
 }) {
-
   const bookDataCopy = [...bookData];
 
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <div
         style={{
           display: "flex",
