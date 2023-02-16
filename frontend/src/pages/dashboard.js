@@ -96,6 +96,10 @@ export default function Dashboard() {
   const [responseOfBookIssue, setResponseOfBookIssue] = React.useState("");
   const [currentPage, setCurrentPage] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(false);
+  const history = useHistory();
+
+  // State of response after login fetching it from history 
+  const [userState, changeUserState] = React.useState(window.history.state);
 
   const setResponseOfBookIssueMethod = (response) => {
     setResponseOfBookIssue(response);
@@ -167,11 +171,20 @@ export default function Dashboard() {
     setListData(mainBookData);
   }
 
+  const logoutFunction = () => {
+    changeUserState(null);
+  }
+
   React.useEffect(() => {
     if (listData.length == 0) {
       getAllBooks();
     }
   }, []);
+
+  // Check if user details are null send back to login page
+  if (userState == undefined || userState == null) {
+    history.replace("/");
+  }
 
   return (
     <Box
@@ -187,8 +200,9 @@ export default function Dashboard() {
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
             <MenuDrawer
-              user={userDetails.userDetail.loginPayload}
+              user={userState.state.loginPayload}
               changeScreen={changePage}
+              logoutFunction={logoutFunction}
             />
             {/* <IconButton aria-label="menu" onClick={handleClick}>
               <MenuIcon style={{ color: "white" }} />
@@ -217,8 +231,8 @@ export default function Dashboard() {
                 );
               })}
             </Popover> */}
-            Hi {userDetails.userDetail.loginPayload.firstname}&nbsp;
-            {userDetails.userDetail.loginPayload.lastname}
+            Hi {userState.state.loginPayload.firstname}&nbsp;
+            {userState.state.loginPayload.lastname}
           </Typography>
           {currentPage == 0 ? (
             <Search>
@@ -270,6 +284,7 @@ export default function Dashboard() {
         ) : (
           <HomePage
             bookData={listData}
+            constBookData={mainBookData}
             userDetails={userDetails.userDetail.loginPayload}
             setResponseOfBookIssueMethod={setResponseOfBookIssueMethod}
             changeBookDataOnFilter={changeBookDataOnFilter}

@@ -1,5 +1,5 @@
 import { Close, Filter1, FilterAlt, Search } from '@mui/icons-material';
-import { Button, Card, Grid, IconButton, MenuItem, TextField } from '@mui/material'
+import { Button, Card, Fab, Grid, IconButton, MenuItem, TextField } from '@mui/material'
 import { Box } from '@mui/system';
 import React from 'react'
 
@@ -41,7 +41,7 @@ export default function FilterPage({
     console.log(`category text you typed ${categoryText}`);
     console.log(`rating you selected ${ratingText}`);
 
-    bookDataCopy = bookDataCopy.filter((item) => {
+    bookDataCopy = mainBookData.filter((item) => {
       const selectedGenre =
         categoryText.toLowerCase === "all" || categoryText === ""
           ? "none"
@@ -50,7 +50,7 @@ export default function FilterPage({
         ratingText === "none" || ratingText === ""
           ? "none"
           : parseInt(ratingText)
-      if ((selectedGenre === "none" || item.genre === selectedGenre)
+      if ((selectedGenre === "none" || item.genre.toLowerCase() === selectedGenre)
         && (selectedRating === "none" || item.rating >= selectedRating)) {
         return true;
       }
@@ -74,11 +74,13 @@ export default function FilterPage({
       paddingTop: "10px",
       paddingRight: '10px',
     }}>
-      <IconButton onClick={(e) => {
-        setFilterEnable(true);
-      }}>
+      <Fab
+        color="primary"
+        onClick={(e) => {
+          setFilterEnable(true);
+        }}>
         <FilterAlt />
-      </IconButton>
+      </Fab>
     </div>
   ) : (
     <div style={{

@@ -16,21 +16,26 @@ import HistoryIcon from "@mui/icons-material/History";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { IconButton } from "@mui/material";
 import { Home } from "@mui/icons-material";
+import { useHistory } from "react-router-dom";
 const menuItem = [
   { title: "Home", icon: <Home />, type: "home" },
   { title: "History", icon: <HistoryIcon />, type: "history" },
   // { title: "Filter", icon: <FilterAltIcon />, type: "filter" },
   { title: "Logout", icon: <LogoutIcon />, type: "logout" },
 ];
-export default function MenuDrawer({ user, changeScreen }) {
+export default function MenuDrawer({ user, changeScreen, logoutFunction }) {
   const [state, setState] = React.useState({
     left: false,
   });
+  const history = useHistory();
   const menuOption = (choice) => {
     if (choice == "Home") {
       changeScreen(0);
     } else if (choice == "History") {
       changeScreen(1);
+    } else if (choice == "Logout") {
+      logoutFunction();
+      history.replace('/')
     }
   };
 

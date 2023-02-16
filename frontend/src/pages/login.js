@@ -42,7 +42,8 @@ export default function LogIn() {
     try {
       let response = await loginUser(dispatch, payload);
       if (response.message) {
-        history.replace('/dashboard')
+        console.log(response);
+        history.replace('/dashboard', response)
       }
       else {
         setError(response.error);

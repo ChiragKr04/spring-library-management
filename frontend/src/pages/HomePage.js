@@ -20,6 +20,7 @@ import FilterPage from "./FilterPage";
 export default function HomePage({
   userDetails,
   bookData,
+  constBookData,
   setResponseOfBookIssueMethod,
   changeBookDataOnFilter,
   setDataOnClearFilter,
@@ -37,7 +38,7 @@ export default function HomePage({
         }}
       >
         <FilterPage
-          mainBookData={bookData}
+          mainBookData={constBookData}
           bookDataCopy={bookDataCopy}
           changeBookDataOnFilter={changeBookDataOnFilter}
           setDataOnClearFilter={setDataOnClearFilter}

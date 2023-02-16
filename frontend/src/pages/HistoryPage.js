@@ -1,7 +1,9 @@
+import { Sort } from "@mui/icons-material";
 import {
   Box,
   Card,
   Chip,
+  Fab,
   Grid,
   Rating,
   Tooltip,
@@ -23,6 +25,7 @@ export default function HistoryPage({ userDetails }) {
   };
 
   const [allBorrowedBooks, setAllBorrowedBooks] = React.useState([]);
+  const [isAscending, setIsAscending] = React.useState(false);
 
   const getUserBookHistory = async () => {
     await RestApiService.post(
@@ -32,6 +35,19 @@ export default function HistoryPage({ userDetails }) {
       setAllBorrowedBooks(res.data);
       console.log(allBorrowedBooks);
     });
+  };
+
+  const sortHistoryDetails = () => {
+    let newBookData = []
+    if (isAscending) {
+      newBookData = allBorrowedBooks
+        .sort((a, b) => new Date(a.issue_date) - new Date(b.issue_date));
+    } else {
+      newBookData = allBorrowedBooks
+        .sort((a, b) => new Date(b.issue_date) - new Date(a.issue_date));
+    }
+    setIsAscending(!isAscending);
+    setAllBorrowedBooks(newBookData);
   };
 
   React.useEffect(() => {
@@ -55,9 +71,18 @@ export default function HistoryPage({ userDetails }) {
         <Card elevation={4}>
           <h1>History</h1>
         </Card>
-
+        <Fab
+          color="primary"
+          onClick={sortHistoryDetails}
+          sx={{
+            position: "fixed",
+            top: "80px",
+            right: "20px"
+          }}
+        >
+          <Sort />
+        </Fab>
         {allBorrowedBooks.map((borrowBook, index) => {
-          console.log(borrowBook);
           return (
             <Card
               key={borrowBook.index}
