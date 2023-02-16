@@ -4,12 +4,17 @@ import com.library.demo.model.*;
 import com.library.demo.repository.BookCopiesRepository;
 import com.library.demo.repository.BookRepository;
 import com.library.demo.repository.UserBorrowHistoryRepository;
+import com.library.demo.repository.UserCredentialRepository;
+import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 @Service
 public class IssueBookService {
+    @Autowired
+    EmailService emailService;
     final
     BookRepository bookRepository;
 
@@ -56,11 +61,12 @@ public class IssueBookService {
             userBorrowHistory.setIssueDate(new Date());
             System.out.println(userBorrowHistory.getAuthor());
             userBorrowHistoryRepository.save(userBorrowHistory);
-            // udating book copies table
+            // updating book copies table
             BookCopies bookCopies = bookCopiesRepository.findByBookCopyId(issueBookPayload.getBookCopyId());
             bookCopies.setAvailable(false);
             bookCopiesRepository.save(bookCopies);
-            System.out.println(bookCopies.isAvailable());
+            emailService.sendEmailForIssueRequest(userBorrowHistory);
+            //System.out.println(bookCopies.isAvailable());
             //check copies availability
             if (bookCopiesRepository.checkForCopyAvailability(
                     issueBookPayload.getBookId()) == 0) {

@@ -16,16 +16,16 @@ public class UserHistoryService {
         this.userBorrowHistoryRepository = userBorrowHistoryRepository;
     }
     public List<Object> fetchUserHistory(String userId) {
-        System.out.println("hi");
+       // System.out.println("hi");
         List<Object> bookList= new ArrayList<>();
 
         List<List<Object>> response = userBorrowHistoryRepository.getUserBorrowHistory(userId);
 //        System.out.println(response.getClass());
         for (int i = 0; i < response.size(); i++) {
             Map<String, Object> book = new HashMap<>();
-            System.out.println(response.get(i));
-            System.out.println(response.get(i).get(0).getClass());
-            System.out.println(response.get(i).get(1));
+//            System.out.println(response.get(i));
+//            System.out.println(response.get(i).get(0).getClass());
+//            System.out.println(response.get(i).get(1));
             book.put("user_borrow_history_id", response.get(i).get(0));
             book.put("book_id", response.get(i).get(1));
             book.put("issue_date", response.get(i).get(2));

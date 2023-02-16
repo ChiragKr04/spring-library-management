@@ -8,14 +8,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SignUpService {
-    @Autowired
-    private UserCredentialRepository userRepository;
-    @Autowired
+    private final UserCredentialRepository userRepository;
+    final
     UserIdGenerator userIdGenerator;
-    @Autowired
+    final
     PasswordGenerator passwordGenerator;
-    @Autowired
+    final
     EmailService emailService;
+
+    public SignUpService(UserCredentialRepository userRepository, UserIdGenerator userIdGenerator, PasswordGenerator passwordGenerator, EmailService emailService) {
+        this.userRepository = userRepository;
+        this.userIdGenerator = userIdGenerator;
+        this.passwordGenerator = passwordGenerator;
+        this.emailService = emailService;
+    }
 
 
     public Response signUp(UserCredential user){
@@ -29,7 +35,7 @@ public class SignUpService {
         user.setUserId(userIdGenerator.idGenerator());
         user.setPassword(passwordGenerator.generatePassword());
         userRepository.save(user);
-        //emailService.sendEmail(user);
+        emailService.sendEmail(user);
         response.setMessage("Account is created");
         return response;
     }
