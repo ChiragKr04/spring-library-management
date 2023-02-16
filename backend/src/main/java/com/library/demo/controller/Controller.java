@@ -1,5 +1,6 @@
 package com.library.demo.controller;
 
+import com.library.demo.demoData.PopulateBookCopies;
 import com.library.demo.demoData.PopulateBookService;
 import com.library.demo.model.*;
 import com.library.demo.service.*;
@@ -32,11 +33,14 @@ public class Controller {
     IssueBookService issueBookService;
     final
     UserHistoryService userHistoryService;
+    final PopulateBookCopies populateBookCopies;
 
     public Controller(IssueBookService issueBookService
-            , UserHistoryService userHistoryService) {
+            , UserHistoryService userHistoryService
+            , PopulateBookCopies populateBookCopies) {
         this.issueBookService = issueBookService;
         this.userHistoryService = userHistoryService;
+        this.populateBookCopies = populateBookCopies;
     }
 
     @PostMapping(path = "/signUp")
@@ -70,8 +74,12 @@ public class Controller {
     }
 
     @GetMapping(path = "/populateBooks")
-    public String populateBooks() throws FileNotFoundException {
+    public String populateBook() throws FileNotFoundException {
         return populateBookService.PopulateBook();
+    }
+    @GetMapping(path = "/populateBookCopies")
+    public String populateBookCopies()  {
+        return populateBookCopies.populateBookCopies();
     }
     @GetMapping(path = "/getCopies")
     public List<BookCopies> getCopies(@RequestParam Integer bookId)  {
