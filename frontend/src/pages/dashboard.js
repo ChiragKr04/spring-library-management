@@ -203,6 +203,7 @@ export default function Dashboard() {
               user={userState.state.loginPayload}
               changeScreen={changePage}
               logoutFunction={logoutFunction}
+              currentPage={currentPage}
             />
             {/* <IconButton aria-label="menu" onClick={handleClick}>
               <MenuIcon style={{ color: "white" }} />

@@ -14,8 +14,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HistoryIcon from "@mui/icons-material/History";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { IconButton } from "@mui/material";
-import { Home } from "@mui/icons-material";
+import { Avatar, IconButton } from "@mui/material";
+import { Home, Person } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 const menuItem = [
   { title: "Home", icon: <Home />, type: "home" },
@@ -23,7 +23,7 @@ const menuItem = [
   // { title: "Filter", icon: <FilterAltIcon />, type: "filter" },
   { title: "Logout", icon: <LogoutIcon />, type: "logout" },
 ];
-export default function MenuDrawer({ user, changeScreen, logoutFunction }) {
+export default function MenuDrawer({ user, changeScreen, logoutFunction, currentPage }) {
   const [state, setState] = React.useState({
     left: false,
   });
@@ -50,6 +50,35 @@ export default function MenuDrawer({ user, changeScreen, logoutFunction }) {
     setState({ ...state, [anchor]: open });
   };
 
+  function stringToColor(string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = '#';
+
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+  }
+
+  function stringAvatar(name) {
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+      },
+      children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+    };
+  }
+
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
@@ -62,7 +91,7 @@ export default function MenuDrawer({ user, changeScreen, logoutFunction }) {
       <List>
         {menuItem.map((element, index) => (
           <ListItem key={element.type} disablePadding>
-            <ListItemButton onClick={() => { menuOption(element.title); }}>
+            <ListItemButton selected={currentPage === index} onClick={() => { menuOption(element.title); }}>
               <ListItemIcon>{element.icon}</ListItemIcon>
               <ListItemText primary={element.title} />
             </ListItemButton>
@@ -89,6 +118,37 @@ export default function MenuDrawer({ user, changeScreen, logoutFunction }) {
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
+            <div style={{
+              display: "flex",
+              flexWrap: "nowrap",
+              justifyContent: "center",
+              margin: "10px",
+            }}>
+              <Avatar
+                alt="Remy Sharp"
+                src="/static/images/avatar/1.jpg"
+                style={{
+                  width: "100px",
+                  height: "100px",
+                }}
+                {...stringAvatar(`${user.firstname} ${user.lastname}`)}
+              />
+            </div>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}>
+              <h2 style={{
+                margin: "0"
+              }}>{user.firstname}</h2>
+              <h3 style={{
+                margin: "0"
+              }}>{user.lastname}</h3>
+              <h5 style={{
+                marginTop: "10px",
+              }}>{user.userId}</h5>
+            </div>
             {list(anchor)}
           </Drawer>
         </React.Fragment>
