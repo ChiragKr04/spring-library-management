@@ -33,7 +33,7 @@ export default function FilterPage({
     },
     {
       value: 'none',
-      label: 'None',
+      label: 'All',
     },
   ];
 
@@ -50,7 +50,7 @@ export default function FilterPage({
         ratingText === "none" || ratingText === ""
           ? "none"
           : parseInt(ratingText)
-      if ((selectedGenre === "none" || item.genre.toLowerCase() === selectedGenre)
+      if ((selectedGenre.toLowerCase() === "none" || item.genre.toLowerCase() === selectedGenre.toLowerCase())
         && (selectedRating === "none" || item.rating >= selectedRating)) {
         return true;
       }

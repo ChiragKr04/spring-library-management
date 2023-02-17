@@ -286,14 +286,14 @@ export default function Dashboard() {
           <HomePage
             bookData={listData}
             constBookData={mainBookData}
-            userDetails={userDetails.userDetail.loginPayload}
+            userDetails={userState.state.loginPayload}
             setResponseOfBookIssueMethod={setResponseOfBookIssueMethod}
             changeBookDataOnFilter={changeBookDataOnFilter}
             setDataOnClearFilter={setDataOnClearFilter}
           />
         )
       ) : currentPage === 1 ? (
-        <HistoryPage userDetails={userDetails.userDetail.loginPayload} />
+        <HistoryPage userDetails={userState.state.loginPayload} />
       ) : (
         <FilterPage />
       )}
