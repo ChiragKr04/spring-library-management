@@ -13,7 +13,8 @@ import { useHistory } from "react-router-dom";
 import { RestApiService } from "../util/RestApiService";
 import { loginUser } from "../context/action";
 import { AccountCircle, Password, Visibility, VisibilityOff } from "@mui/icons-material/";
-import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
+import { Alert, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
+import { ApiConstants } from "../util/ApiConstants";
 
 export default function LogIn() {
   const dispatch = useAuthDispatch();
@@ -21,6 +22,7 @@ export default function LogIn() {
   const [password, setPassw] = React.useState("");
   const [error, setError] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const [showAlert, setShowAlert] = React.useState(-1);
   const history = useHistory();
 
   const handleSubmit = (event) => {
@@ -68,6 +70,26 @@ export default function LogIn() {
     //   console.error(e)
     // }
   };
+
+  const forgotPassword = async () => {
+    setShowAlert(-1);
+    await RestApiService.post(
+      ApiConstants.forgotPassword,
+      {
+        Authorization: "any-auth-token",
+      },
+      {
+        userId: userId,
+      }
+    ).then((result) => {
+      if (result.data) {
+        setShowAlert(1);
+      } else {
+        setShowAlert(0);
+      }
+    });
+  }
+
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid
@@ -173,7 +195,7 @@ export default function LogIn() {
             <p style={{ color: "red" }}>{error}</p>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" onClick={forgotPassword}>
                   Forgot password?
                 </Link>
               </Grid>
@@ -183,6 +205,24 @@ export default function LogIn() {
                 </Link>
               </Grid>
             </Grid>
+            {
+              showAlert == -1 ? <></> : <Alert
+                severity={showAlert == 1 ? "success" : "error"}
+                onClose={
+                  () => {
+                    setShowAlert(-1);
+                  }
+                }
+                style={{
+                  position: "fixed",
+                  bottom: "10px",
+                  right: "10px",
+                  width: "30%",
+                }}
+              >
+                {showAlert == 1 ? <>Email Sent</> : <>User ID incorrect</>}
+              </Alert>
+            }
           </Box>
         </Box>
       </Grid>

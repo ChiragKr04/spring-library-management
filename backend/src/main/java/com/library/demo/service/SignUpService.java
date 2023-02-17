@@ -39,4 +39,15 @@ public class SignUpService {
         response.setMessage("Account is created");
         return response;
     }
+
+    public boolean forgotPassword(String userId){
+        try{
+            UserCredential user = userRepository.FindByUserId(userId);
+            emailService.sendForgotPasswordEmail(user);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+
 }

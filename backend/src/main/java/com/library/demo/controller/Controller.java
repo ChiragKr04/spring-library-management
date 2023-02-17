@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,6 +98,11 @@ public class Controller {
     @PostMapping(path = "/fetchUserHistory")
     public List<Object> fetchUserHistory(@RequestParam String userId) {
         return userHistoryService.fetchUserHistory(userId);
+    }
+
+    @PostMapping(path = "/forgotPassword")
+    public boolean forgotPassword(@RequestBody HashMap<String, String> userId) {
+        return signUpService.forgotPassword(userId.get("userId"));
     }
 
 }

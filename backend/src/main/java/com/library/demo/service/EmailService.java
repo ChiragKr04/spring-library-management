@@ -43,4 +43,16 @@ public class EmailService {
                 + "\n Please Kindly Collect your copy within 2 hour.");
         javaMailSender.send(simpleMailMessage);
     }
+
+    public void sendForgotPasswordEmail(UserCredential user){
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom("librarymanagement34@gmail.com");
+        simpleMailMessage.setTo(user.getEmailId());
+        simpleMailMessage.setSubject("Forgot Password Email");
+        simpleMailMessage.setText(
+                "Hi " + user.getFirstname() + " " + user.getLastname() + ","
+                + "\nYour Password is " + user.getPassword()
+        );
+        javaMailSender.send(simpleMailMessage);
+    }
 }
