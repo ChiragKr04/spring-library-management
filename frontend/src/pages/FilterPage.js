@@ -86,6 +86,7 @@ export default function FilterPage({
     setCategoryText("");
     setRatingText("none");
     setFilterEnable(false);
+    setAllGenre([]);
     setDataOnClearFilter();
   }
 
