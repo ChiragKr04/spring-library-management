@@ -65,7 +65,11 @@ public class IssueBookService {
             BookCopies bookCopies = bookCopiesRepository.findByBookCopyId(issueBookPayload.getBookCopyId());
             bookCopies.setAvailable(false);
             bookCopiesRepository.save(bookCopies);
-            emailService.sendEmailForIssueRequest(userBorrowHistory);
+
+            //////////////////////////
+            // Sending email after book is issued
+//            emailService.sendEmailForIssueRequest(userBorrowHistory);
+
             //System.out.println(bookCopies.isAvailable());
             //check copies availability
             if (bookCopiesRepository.checkForCopyAvailability(

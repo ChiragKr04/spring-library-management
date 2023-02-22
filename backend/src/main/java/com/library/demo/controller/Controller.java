@@ -1,5 +1,7 @@
 package com.library.demo.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.library.demo.demoData.PopulateBookCopies;
 import com.library.demo.demoData.PopulateBookService;
 import com.library.demo.model.*;
@@ -7,12 +9,17 @@ import com.library.demo.service.*;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import reactor.core.publisher.Flux;
 
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.*;
 
 
 @RestController
@@ -103,6 +110,34 @@ public class Controller {
     @PostMapping(path = "/forgotPassword")
     public boolean forgotPassword(@RequestBody HashMap<String, String> userId) {
         return signUpService.forgotPassword(userId.get("userId"));
+    }
+
+    @GetMapping(path = "/stream")
+    public Flux<ServerSentEvent<String>> getSseStream() {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return Flux.interval(Duration.ofSeconds(5))
+                .map(seq -> {
+                    int totalHistory = userHistoryService.getTotalUserBorrowHistory();
+                    Map<String, Integer> data = new HashMap<>();
+                    data.put("data", totalHistory);
+
+                    String json = null;
+                    try {
+                        json = objectMapper.writeValueAsString(data);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+
+                    return ServerSentEvent.<String>builder()
+                            .data(json)
+                            .build();
+                });
+    }
+
+    @GetMapping(path = "/getAllUserHistory")
+    public List<UserBorrowHistory> getAllUserHistory() {
+        return userHistoryService.getAllUserBorrowHistory();
     }
 
 }

@@ -37,6 +37,7 @@ import MenuDrawer from "../components/Menu";
 import HomePage from "./HomePage";
 import HistoryPage from "./HistoryPage";
 import FilterPage from "./FilterPage";
+import AdminPage from "./AdminPage";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -294,7 +295,7 @@ export default function Dashboard() {
         )
       ) : currentPage === 1 ? (
         <HistoryPage userDetails={userState.state.loginPayload} />
-      ) : (
+      ) : currentPage === 2 ? (<AdminPage />) : (
         <FilterPage />
       )}
     </Box>
