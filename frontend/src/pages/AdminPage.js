@@ -92,36 +92,34 @@ export default function AdminPage() {
           ? <div>No Data</div>
           : alluserHistory.map((historyData, index) => {
             return (
-              <div key={index}>
-                <List key={index}>
-                  <ListItem
-                    secondaryAction={
-                      <Grid container>
-                        <Grid item m={1}>
-                          <IconButton edge="end">
-                            <Close sx={{ color: "red" }} />
-                          </IconButton>
-                        </Grid>
-                        <Grid item m={1}>
-                          <IconButton edge="end">
-                            <Check sx={{ color: "green" }} />
-                          </IconButton>
-                        </Grid>
+              <List key={index}>
+                <ListItem
+                  secondaryAction={
+                    <Grid container>
+                      <Grid item m={1}>
+                        <IconButton edge="end">
+                          <Close sx={{ color: "red" }} />
+                        </IconButton>
                       </Grid>
-                    }
-                  >
-                    <ListItemAvatar>
-                      <Avatar>
-                        <Person />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={historyData.bookTitle}
-                      secondary={`Book Id:${historyData.bookId}, Book Copy Id:${historyData.copyId}`}
-                    />
-                  </ListItem>
-                </List>
-              </div>
+                      <Grid item m={1}>
+                        <IconButton edge="end">
+                          <Check sx={{ color: "green" }} />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  }
+                >
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Person />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={historyData.bookTitle}
+                    secondary={`Book Id:${historyData.bookId}, Book Copy Id:${historyData.copyId}`}
+                  />
+                </ListItem>
+              </List>
             )
           })
       }
