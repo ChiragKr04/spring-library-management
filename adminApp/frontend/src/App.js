@@ -1,24 +1,31 @@
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
-import AdminLogin from './pages/AdminLogin'
-import AdminSignUp from './pages/AdminSignUp'
-import HomePage from './pages/HomePage'
+import { Redirect, Route, Switch } from "react-router-dom";
+import "./App.css";
+import { useAuthState } from "./context/context";
+import Dashboard from "./pages/dashboard";
+import Login from "./pages/login";
+import SignUp from "./pages/signup";
+import Search from "./pages/search";
 
-export default function App() {
+function App() {
+  const userDetails = useAuthState();
   return (
     <div>
       <Switch>
         <Route path={"/"} exact>
-          <AdminLogin />
+          <Login />
         </Route>
         <Route path={"/signup"} exact>
-          <AdminSignUp />
+          <SignUp />
         </Route>
-        <Route path={"/home"} exact>
-          <HomePage />
+        <Route path={"/dashboard"}>
+          <Dashboard />
+        </Route>
+        <Route path={"/search"}>
+          <Search />
         </Route>
       </Switch>
     </div>
-  )
+  );
 }
 
+export default App;

@@ -1,5 +1,5 @@
 export class ApiConstants {
-  static port = 5000;
+  static port = 8080;
   static mainUrl = `http://localhost:${this.port}/demo`;
   static getAllUser = `${this.mainUrl}/getAllUser`;
   static login = `${this.mainUrl}/login`;
