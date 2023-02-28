@@ -1,13 +1,13 @@
 package com.library.demo.service;
 
-import com.library.demo.repository.UserCredentialRepository;
+import com.library.demo.repository.AdminCredentialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserIdGenerator {
     @Autowired
-    private UserCredentialRepository userCredentialRepository;
+    private AdminCredentialRepository userCredentialRepository;
 
     final private String lowerCase = "abcdefghijklmnopqrstuvwxyz";
     final private String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

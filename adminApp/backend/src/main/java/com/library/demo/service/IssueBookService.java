@@ -4,8 +4,6 @@ import com.library.demo.model.*;
 import com.library.demo.repository.BookCopiesRepository;
 import com.library.demo.repository.BookRepository;
 import com.library.demo.repository.UserBorrowHistoryRepository;
-import com.library.demo.repository.UserCredentialRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

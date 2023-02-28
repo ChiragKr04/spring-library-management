@@ -7,18 +7,30 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 // import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useAuthDispatch } from "../context/context"
+import { useAuthDispatch } from "../context/context";
 import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router-dom";
 import { RestApiService } from "../util/RestApiService";
 import { loginUser } from "../context/action";
-import { AccountCircle, Password, Visibility, VisibilityOff } from "@mui/icons-material/";
-import { Alert, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
+import {
+  AccountCircle,
+  Password,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material/";
+import {
+  Alert,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+} from "@mui/material";
 import { ApiConstants } from "../util/ApiConstants";
 
 export default function LogIn() {
   const dispatch = useAuthDispatch();
-  const [userId, setUserId] = React.useState("");
+  const [adminId, setAdminId] = React.useState("");
   const [password, setPassw] = React.useState("");
   const [error, setError] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
@@ -35,24 +47,20 @@ export default function LogIn() {
   };
 
   const login = async () => {
-
     let payload = {
-      userId,
-      password
-    }
+      adminId,
+      password,
+    };
 
     try {
       let response = await loginUser(dispatch, payload);
       if (response.message) {
         console.log(response);
-        history.replace('/dashboard', response)
-      }
-      else {
+        history.replace("/dashboard", response);
+      } else {
         setError(response.error);
       }
-    } catch (error) {
-
-    }
+    } catch (error) {}
     // try {
     //   await RestApiService.post(
     //     ApiConstants.login,{
@@ -79,7 +87,7 @@ export default function LogIn() {
         Authorization: "any-auth-token",
       },
       {
-        userId: userId,
+        adminId: adminId,
       }
     ).then((result) => {
       if (result.data) {
@@ -88,7 +96,7 @@ export default function LogIn() {
         setShowAlert(0);
       }
     });
-  }
+  };
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -99,7 +107,7 @@ export default function LogIn() {
         md={7}
         sx={{
           backgroundImage:
-            "url(https://images.unsplash.com/photo-1521587760476-6c12a4b040da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80)",
+            "url(https://images.unsplash.com/photo-1537202108838-e7072bad1927?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1046&q=80)",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -125,19 +133,14 @@ export default function LogIn() {
             justifyContent: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1 }} style={{ backgroundColor: "#FF5733" }}>
             {/* <LockOutlinedIcon /> */}
           </Avatar>
           <Typography component="h1" variant="h5">
-            Log In
+            Admin Log In
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            sx={{ mt: 1 }}
-          >
-
-            <FormControl sx={{ mt: 1, width: '100%' }} variant="outlined">
+          <Box component="form" noValidate sx={{ mt: 1 }}>
+            <FormControl sx={{ mt: 1, width: "100%" }} variant="outlined">
               <InputLabel required>User Id</InputLabel>
               <OutlinedInput
                 fullWidth
@@ -151,18 +154,18 @@ export default function LogIn() {
                 }
                 autoFocus
                 onChange={(e) => {
-                  setUserId(e.target.value);
+                  setAdminId(e.target.value);
                 }}
               />
             </FormControl>
-            <FormControl sx={{ mt: 2, width: '100%' }} variant="outlined">
+            <FormControl sx={{ mt: 2, width: "100%" }} variant="outlined">
               <InputLabel required>Password</InputLabel>
               <OutlinedInput
                 fullWidth
                 name="password"
                 label="Password"
                 id="Password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 startAdornment={
                   <InputAdornment position="start">
                     <Password />
@@ -189,6 +192,7 @@ export default function LogIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={login}
+              style={{ backgroundColor: "#FF5733" }}
             >
               Log In
             </Button>
@@ -205,14 +209,14 @@ export default function LogIn() {
                 </Link>
               </Grid>
             </Grid>
-            {
-              showAlert == -1 ? <></> : <Alert
+            {showAlert == -1 ? (
+              <></>
+            ) : (
+              <Alert
                 severity={showAlert == 1 ? "success" : "error"}
-                onClose={
-                  () => {
-                    setShowAlert(-1);
-                  }
-                }
+                onClose={() => {
+                  setShowAlert(-1);
+                }}
                 style={{
                   position: "fixed",
                   bottom: "10px",
@@ -222,7 +226,7 @@ export default function LogIn() {
               >
                 {showAlert == 1 ? <>Email Sent</> : <>User ID incorrect</>}
               </Alert>
-            }
+            )}
           </Box>
         </Box>
       </Grid>

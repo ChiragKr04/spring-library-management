@@ -3,13 +3,17 @@ package com.library.demo.model;
 import javax.persistence.*;
 
 @Entity
-public class UserCredential {
-    @Id @Column(name = "User_ID")
-    private String userId;
+public class AdminCredential {
+    @Id @Column(name = "Admin_ID")
+    private String adminId;
     @Column(name = "Password", nullable = false)
     private String password;
     @Column(name = "Email_ID", unique = true, nullable = false)
     private String emailId;
+
+    @Column(name = "College", unique = true, nullable = false)
+    private String college;
+
     @Column(name = "Phone_No", nullable = false)
     private String phoneNo;
     @Column(name = "Address", nullable = false)
@@ -18,6 +22,30 @@ public class UserCredential {
     private String firstName;
     @Column(name = "LastName")
     private String lastName;
+    public String getCollege() {
+        return college;
+    }
+
+    public void setCollege(String college) {
+        this.college = college;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
 
     public String getFirstname() {
         return firstName;
@@ -51,12 +79,12 @@ public class UserCredential {
         this.address = address;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getAdminId() {
+        return adminId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
     }
 
     public String getPassword() {
