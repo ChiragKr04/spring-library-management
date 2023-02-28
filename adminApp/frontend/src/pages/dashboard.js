@@ -98,7 +98,7 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = React.useState(false);
   const history = useHistory();
 
-  // State of response after login fetching it from history 
+  // State of response after login fetching it from history
   const [userState, changeUserState] = React.useState(window.history.state);
 
   const setResponseOfBookIssueMethod = (response) => {
@@ -165,15 +165,15 @@ export default function Dashboard() {
     console.log("changeBookDataOnFilter");
     console.log(newBookData);
     setListData(newBookData);
-  }
+  };
 
   const setDataOnClearFilter = () => {
     setListData(mainBookData);
-  }
+  };
 
   const logoutFunction = () => {
     changeUserState(null);
-  }
+  };
 
   React.useEffect(() => {
     if (listData.length == 0) {
@@ -191,7 +191,7 @@ export default function Dashboard() {
       sx={{ flexGrow: 1 }}
       style={{ /*backgroundColor: "gainsboro",*/ height: "100%" }}
     >
-      <AppBar position="static">
+      <AppBar position="static" style={{ backgroundColor: "#FF5733" }}>
         <Toolbar style={{ display: "flex", alignItems: "center" }}>
           <Typography
             variant="h6"
