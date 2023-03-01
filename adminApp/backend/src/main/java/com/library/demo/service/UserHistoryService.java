@@ -1,6 +1,7 @@
 package com.library.demo.service;
 
 import com.library.demo.model.UserBorrowBookFullData;
+import com.library.demo.model.UserBorrowHistory;
 import com.library.demo.repository.UserBorrowHistoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,15 @@ public class UserHistoryService {
             UserBorrowHistoryRepository userBorrowHistoryRepository) {
         this.userBorrowHistoryRepository = userBorrowHistoryRepository;
     }
+
+    public int getTotalUserBorrowHistory() {
+        return userBorrowHistoryRepository.findAll().size();
+    }
+
+    public List<UserBorrowHistory> getAllUserBorrowHistory() {
+        return userBorrowHistoryRepository.findAll();
+    }
+
     public List<Object> fetchUserHistory(String userId) {
        // System.out.println("hi");
         List<Object> bookList= new ArrayList<>();

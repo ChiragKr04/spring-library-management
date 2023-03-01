@@ -1,5 +1,5 @@
 export class ApiConstants {
-  static port = 5050;
+  static port = 5000;
   static mainUrl = `http://localhost:${this.port}/admin`;
   static getAllUser = `${this.mainUrl}/getAllUser`;
   static login = `${this.mainUrl}/login`;
@@ -9,4 +9,6 @@ export class ApiConstants {
   static issueBookCopy = `${this.mainUrl}/issueBook`;
   static fetchUserHistory = `${this.mainUrl}/fetchUserHistory`;
   static forgotPassword = `${this.mainUrl}/forgotPassword`;
+  static sseApi = `${this.mainUrl}/borrowRequest`;
+  static getAllUserHistory = `${this.mainUrl}/getAllUserHistory`;
 }

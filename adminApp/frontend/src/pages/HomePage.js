@@ -1,203 +1,189 @@
-// import {
-//   AppBar,
-//   Box,
-//   Button,
-//   Card,
-//   CardActions,
-//   CardContent,
-//   Chip,
-//   IconButton,
-//   Rating,
-//   Toolbar,
-//   Tooltip,
-//   Typography,
-// } from "@mui/material";
-// import { Stack } from "@mui/system";
-// import React from "react";
-// import BorrowButtonModal from "../components/borrowButtonModal";
-// import FilterPage from "./FilterPage";
-
-// export default function HomePage({
-//   userDetails,
-//   bookData,
-//   constBookData,
-//   setResponseOfBookIssueMethod,
-//   changeBookDataOnFilter,
-//   setDataOnClearFilter,
-// }) {
-//   const bookDataCopy = [...bookData];
-
-//   return (
-//     <div style={{ textAlign: "center" }}>
-//       <div
-//         style={{
-//           display: "flex",
-//           flexDirection: "row",
-//           flexWrap: "wrap",
-//           paddingLeft: "0",
-//         }}
-//       >
-//         <FilterPage
-//           mainBookData={constBookData}
-//           bookDataCopy={bookDataCopy}
-//           changeBookDataOnFilter={changeBookDataOnFilter}
-//           setDataOnClearFilter={setDataOnClearFilter}
-//         />
-//         {bookData?.map((e, i) => {
-//           return (
-//             <div key={i} style={{ margin: "15px", display: "flex" }}>
-//               <Card
-//                 elevation={0}
-//                 className="Bookcard"
-//                 key={e.id}
-//                 style={{ width: "180px" }}
-//               >
-//                 <CardContent
-//                   style={{
-//                     paddingBottom: "0px",
-//                   }}
-//                 >
-//                   <img
-//                     className="imgBook"
-//                     alt={e.title}
-//                     src={e.image}
-//                     style={{ width: "144px", height: "168px" }}
-//                   ></img>
-//                   <Typography
-//                     sx={{ fontSize: 14 }}
-//                     color="text.secondary"
-//                     gutterBottom
-//                   >
-//                     <Tooltip title={e.author} placement="top-start">
-//                       <span
-//                         style={{
-//                           textOverflow: "ellipsis",
-//                           overflow: "hidden",
-//                           width: "180px",
-//                           whiteSpace: "nowrap",
-//                         }}
-//                       >
-//                         {e.author}
-//                       </span>
-//                     </Tooltip>
-//                   </Typography>
-//                   <Typography sx={{ fontWeight: 640 }} component="div">
-//                     <Tooltip placement="bottom-start">
-//                       <Typography
-//                         style={{
-//                           textOverflow: "ellipsis",
-//                           overflow: "hidden",
-//                           width: "150px",
-//                           whiteSpace: "nowrap",
-//                         }}
-//                       >
-//                         {e.title}
-//                       </Typography>
-//                     </Tooltip>
-//                   </Typography>
-//                   <Rating
-//                     name="half-rating-read"
-//                     defaultValue={e.rating}
-//                     precision={0.1}
-//                     readOnly
-//                   />
-//                   <Chip
-//                     label={e.genre}
-//                     style={{
-//                       // height: "2%",
-//                       backgroundColor: "#D61355",
-//                       color: "white",
-//                     }}
-//                   />
-//                 </CardContent>
-//                 <CardActions style={{ position: "relative" /*bottom: "0%"*/ }}>
-//                   <div
-//                     style={{
-//                       display: "flex",
-//                       alignItems: "center",
-//                       width: "100%",
-//                       justifyContent: "space-between",
-//                     }}
-//                   >
-//                     <BorrowButtonModal
-//                       e={e}
-//                       userDetail={userDetails}
-//                       setResponseOfBookIssueMethod={
-//                         setResponseOfBookIssueMethod
-//                       }
-//                     />
-//                     <Typography
-//                       color="text.secondary"
-//                       fontSize={12}
-//                       style={
-//                         e.available ? { color: "green" } : { color: "red" }
-//                       }
-//                     >
-//                       {e.available ? "Available" : "Not Available"}
-//                     </Typography>
-//                   </div>
-//                 </CardActions>
-//               </Card>
-//             </div>
-//           );
-//         })}
-//       </div>
-//       <h1>{bookData.length == 0 ? "No result Found." : ""}</h1>
-//     </div>
-//   );
-// }
-
 import * as React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Avatar, Box, Button, Grid, IconButton, Snackbar, styled, Typography } from "@mui/material";
+import { Stack } from "@mui/system";
+import { deepOrange } from "@mui/material/colors";
+import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
+import { ApiConstants } from "../util/ApiConstants";
+import { RestApiService } from "../util/RestApiService";
+import { Add, Close } from "@mui/icons-material";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
-export default function BasicTable() {
-  return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+export default function HomePage() {
+  const cardHeight = 160;
+  const cardWidth = 260;
+  const textColor = "#EB723F";
+  const batchColor = "#FA2F2F";
+
+  const [prevHistoryLength, setPrevHistoryLength] = React.useState(-1);
+  const [alluserHistory, setAllUserHistory] = React.useState([]);
+
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+
+  const handleClick = () => {
+    setOpenSnackbar(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+  const getAllUserHistory = async () => {
+    await RestApiService.get(ApiConstants.getAllUserHistory)
+      .then((result) => {
+        var sortedHistoryData = result.data
+          .sort((a, b) => new Date(b.issueDate) - new Date(a.issueDate));
+        setAllUserHistory(sortedHistoryData);
+      });
+  }
+
+  function getRealtimeData(data) {
+    setPrevHistoryLength(prevHistoryLength => {
+      if (prevHistoryLength == -1) {
+        // setting history length for first time
+        console.log("setting history length for first time");
+      } else if (prevHistoryLength != data.data) {
+        getAllUserHistory();
+        handleClick();
+      }
+      return data.data;
+    });
+  }
+
+  React.useEffect(() => {
+    const sse = new EventSource(ApiConstants.sseApi);
+    sse.onmessage = e => {
+      console.log(e);
+      getRealtimeData(JSON.parse(e.data));
+    };
+    sse.onerror = (error) => {
+      console.log("SSE error");
+      console.log(error);
+      sse.close();
+    }
+    return () => {
+      sse.close();
+    };
+  }, []);
+
+  const formatString = (str) => {
+    if (str.length <= 8) {
+      return str;
+    } else {
+      return str.substring(0, 8) + "...";
+    }
+  }
+
+  function CardView({ title, batchText, onClick }) {
+    return (
+      <Paper
+        elevation={5}
+      >
+        <Button
+          elevation={5}
+          sx={{
+            height: cardHeight,
+            width: cardWidth,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onClick={() => {
+            console.log("HELLO");
+          }}
+        >
+          <Stack alignItems="center">
+            <Typography
+              sx={{
+                color: textColor,
+                fontSize: 22,
+                fontWeight: "bold"
+              }}
             >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+              {title}
+            </Typography>
+            <Avatar sx={{
+              bgcolor: batchColor,
+              width: 56,
+              height: 56
+            }}>{batchText}</Avatar>
+          </Stack>
+        </Button>
+      </Paper>
+    )
+  }
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <Close fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+  return (
+    <div style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "90vh"
+    }}>
+      <Grid container justifyContent="center" spacing={2}>
+        <Grid item xs={12}>
+          <Grid container justifyContent="center" spacing={12}>
+            <Grid item>
+              <CardView title={"Borrow Request"} batchText={prevHistoryLength} />
+            </Grid>
+            <Grid item>
+              <CardView title={"Extension"} batchText={"0"} />
+            </Grid>
+            <Grid item>
+              <CardView title={"Defaulters"} batchText={"0"} />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} mt={10}>
+          <Grid container justifyContent="center" spacing={12}>
+            <Grid item>
+              <CardView title={"Books Available"} batchText={"0"} />
+            </Grid>
+            <Grid item>
+              <CardView title={"Add Book"} batchText=<Add /> />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={
+          alluserHistory.length == 0
+            ? ""
+            : `New Book Issued. Book Id: ${alluserHistory[0].bookId}, 
+            Book Copy Id: ${alluserHistory[0].copyId}, Title: ${formatString(alluserHistory[0].bookTitle)}`
+        }
+        action={action}
+      />
+    </div>
   );
 }

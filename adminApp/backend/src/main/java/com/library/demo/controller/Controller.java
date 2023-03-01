@@ -1,15 +1,21 @@
 package com.library.demo.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.library.demo.demoData.PopulateBookCopies;
 import com.library.demo.demoData.PopulateBookService;
 import com.library.demo.model.*;
 import com.library.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 import java.io.FileNotFoundException;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -29,8 +35,9 @@ public class Controller {
 //    BookCopiesService bookCopiesService;
 //    final
 //    IssueBookService issueBookService;
-//    final
-//    UserHistoryService userHistoryService;
+    @Autowired
+    UserHistoryService userHistoryService;
+
 //    final PopulateBookCopies populateBookCopies;
 
 //    public Controller(IssueBookService issueBookService
@@ -57,6 +64,35 @@ public class Controller {
 
         return loginService.login(adminCredential);
     }
+
+    @GetMapping(path = "/getAllUserHistory")
+    public List<UserBorrowHistory> getAllUserHistory() {
+        return userHistoryService.getAllUserBorrowHistory();
+    }
+
+    @GetMapping(path = "/borrowRequest")
+    public Flux<ServerSentEvent<String>> getSseStream() {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return Flux.interval(Duration.ofSeconds(5))
+                .map(seq -> {
+                    int totalHistory = userHistoryService.getTotalUserBorrowHistory();
+                    Map<String, Integer> data = new HashMap<>();
+                    data.put("data", totalHistory);
+
+                    String json = null;
+                    try {
+                        json = objectMapper.writeValueAsString(data);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+
+                    return ServerSentEvent.<String>builder()
+                            .data(json)
+                            .build();
+                });
+    }
+
 //    @PostMapping(path = "/search")
 //    public List<Book> getBook(@RequestBody SearchBooks search){
 //        System.out.println(search.getSearch().toLowerCase());
