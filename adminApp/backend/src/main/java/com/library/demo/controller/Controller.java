@@ -101,11 +101,13 @@ public class Controller {
         }
         return bookService.fetchBook(search);
     }
-//
-//    @PostMapping(path="/add-book")
-//    public Book addBook(@RequestBody Book book){
-//        return bookService.addBook(book);
-//    }
+
+    @PostMapping(path="/add-book")
+    public Book addBook(@RequestBody Book book, @RequestHeader HashMap<String, Integer> headers){
+        System.out.println(book);
+        System.out.println("Total Copies to generate " + headers.get("copies"));
+        return bookService.addBook(book);
+    }
 //
 //    @GetMapping(path = "/populateBooks")
 //    public String populateBook() throws FileNotFoundException {

@@ -8,6 +8,7 @@ import { ApiConstants } from "../util/ApiConstants";
 import { RestApiService } from "../util/RestApiService";
 import { Add, Close } from "@mui/icons-material";
 import UnavailableBooks from "./UnavailableBooks";
+import AddNewBook from "./AddNewBook";
 
 export default function HomePage() {
   const cardHeight = 160;
@@ -96,7 +97,7 @@ export default function HomePage() {
   React.useEffect(() => {
     const sse = new EventSource(ApiConstants.sseApi);
     sse.onmessage = e => {
-      console.log(e);
+      // console.log(e);
       getRealtimeData(JSON.parse(e.data));
     };
     sse.onerror = (error) => {
@@ -211,7 +212,7 @@ export default function HomePage() {
                 /> />
             </Grid>
             <Grid item>
-              <CardView title={"Add Book"} batchText=<Add /> />
+              <CardView title={"Add Book"} batchText=<Add /> popUpView=<AddNewBook /> />
             </Grid>
           </Grid>
         </Grid>

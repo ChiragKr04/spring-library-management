@@ -11,4 +11,6 @@ export class ApiConstants {
   static forgotPassword = `${this.mainUrl}/forgotPassword`;
   static sseApi = `${this.mainUrl}/borrowRequest`;
   static getAllUserHistory = `${this.mainUrl}/getAllUserHistory`;
+  static addBook = `${this.mainUrl}/add-book`;
+
 }
