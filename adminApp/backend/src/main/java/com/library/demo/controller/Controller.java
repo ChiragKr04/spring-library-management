@@ -27,8 +27,8 @@ public class Controller {
     SignUpService signUpService;
     @Autowired
     LoginService loginService;
-//    @Autowired
-//    BookService bookService;
+    @Autowired
+    BookService bookService;
 //    @Autowired
 //    PopulateBookService populateBookService;
 //    @Autowired
@@ -93,14 +93,14 @@ public class Controller {
                 });
     }
 
-//    @PostMapping(path = "/search")
-//    public List<Book> getBook(@RequestBody SearchBooks search){
-//        System.out.println(search.getSearch().toLowerCase());
-//        if (search.getSearch().toLowerCase().equals("all")){
-//            return bookService.getAllBooks();
-//        }
-//        return bookService.fetchBook(search);
-//    }
+    @PostMapping(path = "/search")
+    public List<Book> getBook(@RequestBody SearchBooks search){
+        System.out.println(search.getSearch().toLowerCase());
+        if (search.getSearch().toLowerCase().equals("all")){
+            return bookService.getAllBooks();
+        }
+        return bookService.fetchBook(search);
+    }
 //
 //    @PostMapping(path="/add-book")
 //    public Book addBook(@RequestBody Book book){
