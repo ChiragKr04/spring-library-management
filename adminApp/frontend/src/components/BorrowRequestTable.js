@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import { Card } from "@mui/material";
 import IconButtons from "./IconButton";
 
-export default function BorrowRequestTable({ activeRequest }) {
+export default function BorrowRequestTable({ activeRequest, Reload }) {
   return (
     <TableContainer component={Card}>
       <Table sx={{ minWidth: 850 }} aria-label="simple table">
@@ -37,7 +37,10 @@ export default function BorrowRequestTable({ activeRequest }) {
               <TableCell align="right">{request.copyId}</TableCell>
               <TableCell align="right">{request.userId}</TableCell>
               <TableCell>
-                <IconButtons Request={request}></IconButtons>
+                <IconButtons
+                  Request={activeRequest[index]}
+                  Reload={Reload}
+                ></IconButtons>
               </TableCell>
             </TableRow>
           ))}

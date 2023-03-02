@@ -121,7 +121,7 @@ public class Controller {
     public String disapproveRequest(@RequestBody UserBorrowHistory userBorrowHistory){
         System.out.println(userBorrowHistory.getUserBorrowHistoryId());
         System.out.println(userBorrowHistory.getUserId());
-        return bookBorrowRequestService.approveRequest(userBorrowHistory);
+        return bookBorrowRequestService.disapproveRequest(userBorrowHistory);
     }
 
 

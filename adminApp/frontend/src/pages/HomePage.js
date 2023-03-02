@@ -66,7 +66,7 @@ export default function HomePage() {
     getAllBooks();
   }, []);
 
-  React.useEffect(() => { }, [notAvailableBooks]);
+  React.useEffect(() => {}, [notAvailableBooks]);
 
   const modalStyle = {
     position: "absolute",
@@ -109,6 +109,10 @@ export default function HomePage() {
         console.log(allActiveRequest);
       }
     );
+  };
+  const reload = async () => {
+    getActiveBorrowRequests();
+    handleModalClose();
   };
 
   function getRealtimeData(data) {
@@ -230,9 +234,10 @@ export default function HomePage() {
                 title={"Borrow Request"}
                 popUpView=<BorrowRequestPage
                   ActiveRequest={allActiveRequest}
+                  Reload={reload}
                 ></BorrowRequestPage>
                 batchText={
-                  allActiveRequest.length == 0 ? (
+                  allActiveRequest.length == -1 ? (
                     <CircularProgress disableShrink color="inherit" />
                   ) : (
                     allActiveRequest.length
@@ -274,11 +279,11 @@ export default function HomePage() {
       </Grid>
       <Dialog
         maxWidth={currentPopupView.type === BorrowRequestPage ? "lg" : "sm"}
-        fullWidth open={openModal}
-        onClose={handleModalClose}>
-        <DialogContent>
-          {currentPopupView}
-        </DialogContent>
+        fullWidth
+        open={openModal}
+        onClose={handleModalClose}
+      >
+        <DialogContent>{currentPopupView}</DialogContent>
       </Dialog>
       <Snackbar
         open={openSnackbar}
@@ -289,8 +294,8 @@ export default function HomePage() {
             ? ""
             : `New Book Issued. Book Id: ${alluserHistory[0].bookId}, 
             Book Copy Id: ${alluserHistory[0].copyId}, Title: ${formatString(
-              alluserHistory[0].bookTitle
-            )}`
+                alluserHistory[0].bookTitle
+              )}`
         }
         action={action}
       />
