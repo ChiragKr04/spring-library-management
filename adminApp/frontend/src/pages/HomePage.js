@@ -1,6 +1,6 @@
 import * as React from "react";
 import Paper from "@mui/material/Paper";
-import {
+import { Alert,
   Avatar,
   Box,
   Button,
@@ -21,6 +21,8 @@ import { ApiConstants } from "../util/ApiConstants";
 import { RestApiService } from "../util/RestApiService";
 import { Add, Close } from "@mui/icons-material";
 import UnavailableBooks from "./UnavailableBooks";
+import AddNewBook from "./AddNewBook";
+import BorrowRequestPage from "./BorrowRequestPage";
 import BorrowRequestPage from "./BorrowRequestPage";
 
 export default function HomePage() {
@@ -39,6 +41,8 @@ export default function HomePage() {
   const [currentPopupView, setCurrentPopupView] = React.useState(<div></div>);
   const handleModalOpen = () => setOpenModal(true);
   const handleModalClose = () => setOpenModal(false);
+
+  const [newBookPopup, setNewBookPopup] = React.useState(false);
 
   const [notAvailableBooks, setNotAvailableBooks] = React.useState([]);
 
@@ -123,7 +127,7 @@ export default function HomePage() {
   React.useEffect(() => {
     const sse = new EventSource(ApiConstants.sseApi);
     sse.onmessage = (e) => {
-      console.log(e);
+      // console.log(e);
       getRealtimeData(JSON.parse(e.data));
     };
     sse.onerror = (error) => {
@@ -255,7 +259,12 @@ export default function HomePage() {
               />
             </Grid>
             <Grid item>
-              <CardView title={"Add Book"} batchText=<Add /> />
+              <CardView title={"Add Book"} batchText=<Add />
+                popUpView=<AddNewBook
+                  openPopup={() => {
+                    handleModalClose();
+                    setNewBookPopup(true)
+                  }} /> />
             </Grid>
           </Grid>
         </Grid>
@@ -283,6 +292,11 @@ export default function HomePage() {
         }
         action={action}
       />
+      <Snackbar open={newBookPopup} autoHideDuration={6000} onClose={() => setNewBookPopup(false)}>
+        <Alert onClose={() => setNewBookPopup(false)} severity="success" sx={{ width: '100%' }}>
+          New Book Added!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

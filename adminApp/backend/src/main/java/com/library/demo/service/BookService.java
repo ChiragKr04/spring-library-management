@@ -1,5 +1,6 @@
 package com.library.demo.service;
 
+import com.library.demo.demoData.PopulateBookCopies;
 import com.library.demo.model.Book;
 import com.library.demo.model.SearchBooks;
 import com.library.demo.repository.BookRepository;
@@ -12,6 +13,8 @@ import java.util.List;
 public class BookService {
     @Autowired
     BookRepository bookRepository;
+    @Autowired
+    PopulateBookCopies populateBookCopies;
     public List<Book> fetchBook(SearchBooks search){
         System.out.println(search.getClass());
         return bookRepository.findByTitleContaining(search.getSearch());

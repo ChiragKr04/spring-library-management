@@ -32,4 +32,14 @@ public class PopulateBookCopies {
         }
         return "success";
     }
+    public String generateBookCopies(long bookId, int totalCopies){
+        System.out.println("TOTAL COPIES "+ totalCopies);
+        for (int i = 0; i < totalCopies; i++) {
+            BookCopies bookCopies = new BookCopies();
+            bookCopies.setBookId(bookId);
+            bookCopies.setAvailable(true);
+            bookCopiesRepository.save(bookCopies);
+        }
+        return "success";
+    }
 }

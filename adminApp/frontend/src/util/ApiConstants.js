@@ -11,6 +11,8 @@ export class ApiConstants {
   static forgotPassword = `${this.mainUrl}/forgotPassword`;
   static sseApi = `${this.mainUrl}/borrowRequest`;
   static getAllUserHistory = `${this.mainUrl}/getAllUserHistory`;
+  static addBook = `${this.mainUrl}/add-book`;
+
   static getAllActiveBorrowRequest = `${this.mainUrl}/getBorrowRequest`;
   static approvedRequest = `${this.mainUrl}/approveRequest`;
   static disapprovedRequest = `${this.mainUrl}/disapproveRequest`;

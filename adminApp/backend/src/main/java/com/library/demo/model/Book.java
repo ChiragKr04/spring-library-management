@@ -15,7 +15,7 @@ public class Book {
     @NonNull
     private String author;
     @NonNull
-    private boolean available;
+    private boolean available = true;
     @NonNull
     private double rating;
     @NonNull
