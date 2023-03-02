@@ -170,11 +170,7 @@ export default function HomePage() {
             if (popUpView != null) {
               setCurrentPopupView(popUpView);
             } else {
-              setCurrentPopupView(
-                <BorrowRequestPage
-                  ActiveRequest={allActiveRequest}
-                ></BorrowRequestPage>
-              );
+              setCurrentPopupView(<div>No Data Available</div>);
             }
             handleModalOpen();
           }}
@@ -232,6 +228,9 @@ export default function HomePage() {
             <Grid item>
               <CardView
                 title={"Borrow Request"}
+                popUpView=<BorrowRequestPage
+                  ActiveRequest={allActiveRequest}
+                ></BorrowRequestPage>
                 batchText={
                   allActiveRequest.length == 0 ? (
                     <CircularProgress disableShrink color="inherit" />
@@ -273,23 +272,14 @@ export default function HomePage() {
           </Grid>
         </Grid>
       </Grid>
-      <Modal open={openModal} onClose={handleModalClose}>
-        <Box style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: "80vw",
-          height: "60vh",
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          overflowY: "scroll",
-          p: 4,
-        }}>
+      <Dialog
+        maxWidth={currentPopupView.type === BorrowRequestPage ? "lg" : "sm"}
+        fullWidth open={openModal}
+        onClose={handleModalClose}>
+        <DialogContent>
           {currentPopupView}
-        </Box>
-      </Modal>
+        </DialogContent>
+      </Dialog>
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}

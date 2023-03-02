@@ -20,7 +20,7 @@ export default function BorrowRequestPage({ ActiveRequest }) {
     return <div>Loading...</div>;
   }
   return (
-    <div style={{ with: "33%" }}>
+    <div>
       <BorrowRequestTable activeRequest={ActiveRequest}></BorrowRequestTable>
     </div>
   );
