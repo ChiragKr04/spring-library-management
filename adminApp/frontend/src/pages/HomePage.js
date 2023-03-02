@@ -1,6 +1,6 @@
 import * as React from "react";
 import Paper from "@mui/material/Paper";
-import { Avatar, Box, Button, CircularProgress, Dialog, DialogContent, Grid, IconButton, Modal, Snackbar, styled, Typography } from "@mui/material";
+import { Alert, Avatar, Box, Button, CircularProgress, Dialog, DialogContent, Grid, IconButton, Modal, Snackbar, styled, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import { deepOrange } from "@mui/material/colors";
 import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
@@ -9,6 +9,7 @@ import { RestApiService } from "../util/RestApiService";
 import { Add, Close } from "@mui/icons-material";
 import UnavailableBooks from "./UnavailableBooks";
 import AddNewBook from "./AddNewBook";
+import BorrowRequestPage from "./BorrowRequestPage";
 
 export default function HomePage() {
   const cardHeight = 160;
@@ -25,6 +26,8 @@ export default function HomePage() {
   const [currentPopupView, setCurrentPopupView] = React.useState(<div></div>);
   const handleModalOpen = () => setOpenModal(true);
   const handleModalClose = () => setOpenModal(false);
+
+  const [newBookPopup, setNewBookPopup] = React.useState(false);
 
   const [notAvailableBooks, setNotAvailableBooks] = React.useState([]);
 
@@ -212,7 +215,12 @@ export default function HomePage() {
                 /> />
             </Grid>
             <Grid item>
-              <CardView title={"Add Book"} batchText=<Add /> popUpView=<AddNewBook /> />
+              <CardView title={"Add Book"} batchText=<Add />
+                popUpView=<AddNewBook
+                  openPopup={() => {
+                    handleModalClose();
+                    setNewBookPopup(true)
+                  }} /> />
             </Grid>
           </Grid>
         </Grid>
@@ -241,6 +249,11 @@ export default function HomePage() {
         }
         action={action}
       />
+      <Snackbar open={newBookPopup} autoHideDuration={6000} onClose={() => setNewBookPopup(false)}>
+        <Alert onClose={() => setNewBookPopup(false)} severity="success" sx={{ width: '100%' }}>
+          New Book Added!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

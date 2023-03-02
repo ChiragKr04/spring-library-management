@@ -4,7 +4,7 @@ import { Add, Remove } from '@mui/icons-material';
 import { RestApiService } from '../util/RestApiService';
 import { ApiConstants } from '../util/ApiConstants';
 
-export default function AddNewBook() {
+export default function AddNewBook({ openPopup }) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -47,6 +47,7 @@ export default function AddNewBook() {
     ).then(result => {
       console.log(result);
     });
+    openPopup();
   }
 
   return (

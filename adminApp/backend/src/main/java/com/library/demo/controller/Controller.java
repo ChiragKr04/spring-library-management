@@ -38,7 +38,8 @@ public class Controller {
     @Autowired
     UserHistoryService userHistoryService;
 
-//    final PopulateBookCopies populateBookCopies;
+    @Autowired
+    PopulateBookCopies populateBookCopies;
 
 //    public Controller(IssueBookService issueBookService
 //            , UserHistoryService userHistoryService
@@ -103,11 +104,23 @@ public class Controller {
     }
 
     @PostMapping(path="/add-book")
-    public Book addBook(@RequestBody Book book, @RequestHeader HashMap<String, Integer> headers){
+    public Book addBook(@RequestBody Book book, @RequestHeader HashMap<String, String> headers){
         System.out.println(book);
         System.out.println("Total Copies to generate " + headers.get("copies"));
-        return bookService.addBook(book);
+        var data = bookService.addBook(book);
+        String copies = headers.get("copies").toString();
+        populateBookCopies.generateBookCopies(data.getId(),Integer.parseInt(copies));
+        return data;
     }
+
+    @PostMapping(path="/update-copies")
+    public boolean updateCopies(@RequestHeader HashMap<String, String> headers){
+        String bookId = headers.get("bookId");
+        String copies = headers.get("copies");
+        populateBookCopies.generateBookCopies(Long.parseLong(bookId),Integer.parseInt(copies));
+        return true;
+    }
+
 //
 //    @GetMapping(path = "/populateBooks")
 //    public String populateBook() throws FileNotFoundException {
