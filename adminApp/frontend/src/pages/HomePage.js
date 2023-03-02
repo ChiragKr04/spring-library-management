@@ -1,6 +1,7 @@
 import * as React from "react";
 import Paper from "@mui/material/Paper";
-import { Alert,
+import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -22,7 +23,6 @@ import { RestApiService } from "../util/RestApiService";
 import { Add, Close } from "@mui/icons-material";
 import UnavailableBooks from "./UnavailableBooks";
 import AddNewBook from "./AddNewBook";
-import BorrowRequestPage from "./BorrowRequestPage";
 import BorrowRequestPage from "./BorrowRequestPage";
 
 export default function HomePage() {
@@ -233,10 +233,10 @@ export default function HomePage() {
               <CardView
                 title={"Borrow Request"}
                 batchText={
-                  prevHistoryLength == -1 ? (
+                  allActiveRequest.length == 0 ? (
                     <CircularProgress disableShrink color="inherit" />
                   ) : (
-                    prevHistoryLength
+                    allActiveRequest.length
                   )
                 }
               />
@@ -259,12 +259,16 @@ export default function HomePage() {
               />
             </Grid>
             <Grid item>
-              <CardView title={"Add Book"} batchText=<Add />
+              <CardView
+                title={"Add Book"}
+                batchText=<Add />
                 popUpView=<AddNewBook
                   openPopup={() => {
                     handleModalClose();
-                    setNewBookPopup(true)
-                  }} /> />
+                    setNewBookPopup(true);
+                  }}
+                />
+              />
             </Grid>
           </Grid>
         </Grid>
@@ -292,8 +296,16 @@ export default function HomePage() {
         }
         action={action}
       />
-      <Snackbar open={newBookPopup} autoHideDuration={6000} onClose={() => setNewBookPopup(false)}>
-        <Alert onClose={() => setNewBookPopup(false)} severity="success" sx={{ width: '100%' }}>
+      <Snackbar
+        open={newBookPopup}
+        autoHideDuration={6000}
+        onClose={() => setNewBookPopup(false)}
+      >
+        <Alert
+          onClose={() => setNewBookPopup(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           New Book Added!
         </Alert>
       </Snackbar>
