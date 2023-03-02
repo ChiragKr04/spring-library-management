@@ -1,6 +1,19 @@
 import * as React from "react";
 import Paper from "@mui/material/Paper";
-import { Avatar, Box, Button, CircularProgress, Dialog, DialogContent, Grid, IconButton, Modal, Snackbar, styled, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogContent,
+  Grid,
+  IconButton,
+  Modal,
+  Snackbar,
+  styled,
+  Typography,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import { deepOrange } from "@mui/material/colors";
 import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
@@ -8,6 +21,7 @@ import { ApiConstants } from "../util/ApiConstants";
 import { RestApiService } from "../util/RestApiService";
 import { Add, Close } from "@mui/icons-material";
 import UnavailableBooks from "./UnavailableBooks";
+import BorrowRequestPage from "./BorrowRequestPage";
 
 export default function HomePage() {
   const cardHeight = 160;
@@ -17,6 +31,7 @@ export default function HomePage() {
 
   const [prevHistoryLength, setPrevHistoryLength] = React.useState(-1);
   const [alluserHistory, setAllUserHistory] = React.useState([]);
+  const [allActiveRequest, setAllActiveRequest] = React.useState([]);
 
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
@@ -37,25 +52,26 @@ export default function HomePage() {
         search: "all",
       }
     ).then((result) => {
-      setNotAvailableBooks(result.data.filter(obj => obj.available == false));
+      setNotAvailableBooks(result.data.filter((obj) => obj.available == false));
     });
   };
 
   React.useEffect(() => {
     console.log(notAvailableBooks);
+    getActiveBorrowRequests();
     getAllBooks();
   }, []);
 
-  React.useEffect(() => { }, [notAvailableBooks]);
+  React.useEffect(() => {}, [notAvailableBooks]);
 
   const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
     p: 4,
   };
@@ -65,23 +81,34 @@ export default function HomePage() {
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setOpenSnackbar(false);
   };
 
   const getAllUserHistory = async () => {
-    await RestApiService.get(ApiConstants.getAllUserHistory)
-      .then((result) => {
-        var sortedHistoryData = result.data
-          .sort((a, b) => new Date(b.issueDate) - new Date(a.issueDate));
-        setAllUserHistory(sortedHistoryData);
-      });
-  }
+    await RestApiService.get(ApiConstants.getAllUserHistory).then((result) => {
+      console.log(result.data);
+      var sortedHistoryData = result.data.sort(
+        (a, b) => new Date(b.issueDate) - new Date(a.issueDate)
+      );
+      setAllUserHistory(sortedHistoryData);
+      console.log(alluserHistory);
+    });
+  };
+  const getActiveBorrowRequests = async () => {
+    await RestApiService.get(ApiConstants.getAllActiveBorrowRequest).then(
+      (result) => {
+        console.log(result.data);
+        setAllActiveRequest(result.data);
+        console.log(allActiveRequest);
+      }
+    );
+  };
 
   function getRealtimeData(data) {
-    setPrevHistoryLength(prevHistoryLength => {
+    setPrevHistoryLength((prevHistoryLength) => {
       if (prevHistoryLength == -1) {
         // setting history length for first time
         console.log("setting history length for first time");
@@ -95,7 +122,7 @@ export default function HomePage() {
 
   React.useEffect(() => {
     const sse = new EventSource(ApiConstants.sseApi);
-    sse.onmessage = e => {
+    sse.onmessage = (e) => {
       console.log(e);
       getRealtimeData(JSON.parse(e.data));
     };
@@ -103,7 +130,7 @@ export default function HomePage() {
       console.log("SSE error");
       console.log(error);
       sse.close();
-    }
+    };
     return () => {
       sse.close();
     };
@@ -115,13 +142,11 @@ export default function HomePage() {
     } else {
       return str.substring(0, 8) + "...";
     }
-  }
+  };
 
   function CardView({ title, batchText, onClick, popUpView }) {
     return (
-      <Paper
-        elevation={5}
-      >
+      <Paper elevation={5}>
         <Button
           elevation={5}
           sx={{
@@ -133,13 +158,19 @@ export default function HomePage() {
           }}
           onClick={() => {
             console.log("HELLO");
+            // getAllUserHistory();
+            // getActiveBorrowRequests();
             if (onClick != null) {
               onClick();
             }
             if (popUpView != null) {
               setCurrentPopupView(popUpView);
             } else {
-              setCurrentPopupView(<div>No Data</div>);
+              setCurrentPopupView(
+                <BorrowRequestPage
+                  ActiveRequest={allActiveRequest}
+                ></BorrowRequestPage>
+              );
             }
             handleModalOpen();
           }}
@@ -149,20 +180,24 @@ export default function HomePage() {
               sx={{
                 color: textColor,
                 fontSize: 22,
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
             >
               {title}
             </Typography>
-            <Avatar sx={{
-              bgcolor: batchColor,
-              width: 56,
-              height: 56
-            }}>{batchText}</Avatar>
+            <Avatar
+              sx={{
+                bgcolor: batchColor,
+                width: 56,
+                height: 56,
+              }}
+            >
+              {batchText}
+            </Avatar>
           </Stack>
         </Button>
       </Paper>
-    )
+    );
   }
 
   const action = (
@@ -179,19 +214,28 @@ export default function HomePage() {
   );
 
   return (
-    <div style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      height: "90vh"
-    }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "90vh",
+      }}
+    >
       <Grid container justifyContent="center" spacing={2}>
         <Grid item xs={12}>
           <Grid container justifyContent="center" spacing={12}>
             <Grid item>
               <CardView
                 title={"Borrow Request"}
-                batchText={prevHistoryLength == -1 ? <CircularProgress disableShrink color="inherit" /> : prevHistoryLength} />
+                batchText={
+                  prevHistoryLength == -1 ? (
+                    <CircularProgress disableShrink color="inherit" />
+                  ) : (
+                    prevHistoryLength
+                  )
+                }
+              />
             </Grid>
             <Grid item>
               <CardView title={"Extension"} batchText={"0"} />
@@ -207,8 +251,8 @@ export default function HomePage() {
               <CardView
                 title={"Unavailable Books"}
                 batchText={notAvailableBooks.length}
-                popUpView=<UnavailableBooks bookList={notAvailableBooks}
-                /> />
+                popUpView=<UnavailableBooks bookList={notAvailableBooks} />
+              />
             </Grid>
             <Grid item>
               <CardView title={"Add Book"} batchText=<Add /> />
@@ -216,13 +260,10 @@ export default function HomePage() {
           </Grid>
         </Grid>
       </Grid>
-      <Dialog
-        open={openModal}
-        onClose={handleModalClose}
-      >
+      <Dialog open={openModal} onClose={handleModalClose}>
         <DialogContent
           style={{
-            width: "50vh"
+            width: "50vh",
           }}
         >
           {currentPopupView}
@@ -236,7 +277,9 @@ export default function HomePage() {
           alluserHistory.length == 0
             ? ""
             : `New Book Issued. Book Id: ${alluserHistory[0].bookId}, 
-            Book Copy Id: ${alluserHistory[0].copyId}, Title: ${formatString(alluserHistory[0].bookTitle)}`
+            Book Copy Id: ${alluserHistory[0].copyId}, Title: ${formatString(
+                alluserHistory[0].bookTitle
+              )}`
         }
         action={action}
       />

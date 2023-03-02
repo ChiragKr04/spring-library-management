@@ -25,6 +25,10 @@ public class UserHistoryService {
         return userBorrowHistoryRepository.findAll();
     }
 
+    public List<UserBorrowHistory> getAllActiveBorrowRequest(){
+        return userBorrowHistoryRepository.getAllActiveRequest();
+    }
+
     public List<Object> fetchUserHistory(String userId) {
        // System.out.println("hi");
         List<Object> bookList= new ArrayList<>();

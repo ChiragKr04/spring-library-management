@@ -6,6 +6,7 @@ import com.library.demo.demoData.PopulateBookCopies;
 import com.library.demo.demoData.PopulateBookService;
 import com.library.demo.model.*;
 import com.library.demo.service.*;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,9 @@ public class Controller {
     LoginService loginService;
     @Autowired
     BookService bookService;
+    @Autowired
+    BookBorrowRequestService bookBorrowRequestService;
+
 //    @Autowired
 //    PopulateBookService populateBookService;
 //    @Autowired
@@ -70,6 +74,10 @@ public class Controller {
         return userHistoryService.getAllUserBorrowHistory();
     }
 
+    @GetMapping(path = "/getBorrowRequest")
+    public List<UserBorrowHistory> getActiveBorrowRequests(){
+        return userHistoryService.getAllActiveBorrowRequest();
+    }
     @GetMapping(path = "/borrowRequest")
     public Flux<ServerSentEvent<String>> getSseStream() {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -101,6 +109,20 @@ public class Controller {
         }
         return bookService.fetchBook(search);
     }
+
+    @PostMapping(path = "/approveRequest")
+    public String approveRequest(@RequestBody UserBorrowHistory userBorrowHistory){
+        System.out.println(userBorrowHistory.getUserBorrowHistoryId());
+        System.out.println(userBorrowHistory.getUserId());
+        return bookBorrowRequestService.approveRequest(userBorrowHistory);
+    }
+    @PostMapping(path = "/disapproveRequest")
+    public String disapproveRequest(@RequestBody UserBorrowHistory userBorrowHistory){
+        System.out.println(userBorrowHistory.getUserBorrowHistoryId());
+        System.out.println(userBorrowHistory.getUserId());
+        return bookBorrowRequestService.approveRequest(userBorrowHistory);
+    }
+
 //
 //    @PostMapping(path="/add-book")
 //    public Book addBook(@RequestBody Book book){

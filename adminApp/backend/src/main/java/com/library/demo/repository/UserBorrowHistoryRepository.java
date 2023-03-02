@@ -34,4 +34,6 @@ public interface UserBorrowHistoryRepository extends JpaRepository<UserBorrowHis
             "ON bh.book_id = b.id\n" +
             "WHERE bh.user_id = ?1", nativeQuery = true)
     List<List<Object>> getUserBorrowHistory(String userId);
+    @Query(value = "select * from user_borrow_history where status is null",nativeQuery = true)
+    List<UserBorrowHistory> getAllActiveRequest();
 }
