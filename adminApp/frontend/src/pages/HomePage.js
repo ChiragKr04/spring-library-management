@@ -66,7 +66,7 @@ export default function HomePage() {
     getAllBooks();
   }, []);
 
-  React.useEffect(() => {}, [notAvailableBooks]);
+  React.useEffect(() => { }, [notAvailableBooks]);
 
   const modalStyle = {
     position: "absolute",
@@ -273,15 +273,23 @@ export default function HomePage() {
           </Grid>
         </Grid>
       </Grid>
-      <Dialog open={openModal} onClose={handleModalClose}>
-        <DialogContent
-          style={{
-            width: "50vh",
-          }}
-        >
+      <Modal open={openModal} onClose={handleModalClose}>
+        <Box style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: "80vw",
+          height: "60vh",
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          overflowY: "scroll",
+          p: 4,
+        }}>
           {currentPopupView}
-        </DialogContent>
-      </Dialog>
+        </Box>
+      </Modal>
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}
@@ -291,8 +299,8 @@ export default function HomePage() {
             ? ""
             : `New Book Issued. Book Id: ${alluserHistory[0].bookId}, 
             Book Copy Id: ${alluserHistory[0].copyId}, Title: ${formatString(
-                alluserHistory[0].bookTitle
-              )}`
+              alluserHistory[0].bookTitle
+            )}`
         }
         action={action}
       />
