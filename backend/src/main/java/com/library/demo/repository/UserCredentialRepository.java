@@ -5,15 +5,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Objects;
-
 @Repository
 public interface UserCredentialRepository extends JpaRepository<UserCredential,Integer> {
     boolean existsByEmailId(String emailId);
+    // boolean existByEmailID(String email);
+   @Query(value = "select * from user_credential where user_id = ?1 and password = ?2", nativeQuery = true)
+    UserCredential fetchUser(String userId,String password);
 
-    @Query(value = "select user_id, first_name, last_name, email_id, address, phone_no " +
-            "from user_credential " +
-            "where user_id = ?1 and password = ?2", nativeQuery = true)
-    Object getUser(String id, String password);
+    boolean existsByUserId(String userId);
+
+    @Query(value = "select * from user_credential where user_id = ?1", nativeQuery = true)
+
+    UserCredential FindByUserId(String userId);
+
+    //boolean findById(String userId);
 }

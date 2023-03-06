@@ -1,32 +1,30 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
-import HomeScreen from './components/home_screen/HomeScreen';
-import Login from './components/login_screen/Login';
+import { Redirect, Route, Switch } from "react-router-dom";
+import "./App.css";
+import { useAuthState } from "./context/context";
+import Dashboard from "./pages/dashboard";
+import Login from "./pages/login";
+import SignUp from "./pages/signup";
+import Search from "./pages/search";
 
 function App() {
-
-  const routes = {
-
-  }
-
+  const userDetails = useAuthState();
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={
+    <div>
+      <Switch>
+        <Route path={"/"} exact>
           <Login />
-        } />
-        <Route path="/login" element={
-          <Login />
-        } />
-        <Route path="/home" element={
-          <HomeScreen />
-        } />
-        <Route path="*" element={
-          <Login />
-        } />
-      </Routes>
-    </BrowserRouter>
+        </Route>
+        <Route path={"/signup"} exact>
+          <SignUp />
+        </Route>
+        <Route path={"/dashboard"}>
+          <Dashboard />
+        </Route>
+        <Route path={"/search"}>
+          <Search />
+        </Route>
+      </Switch>
+    </div>
   );
 }
 

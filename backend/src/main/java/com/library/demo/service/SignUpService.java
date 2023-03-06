@@ -1,47 +1,53 @@
 package com.library.demo.service;
 
-import com.library.demo.model.Result;
+import com.library.demo.model.Response;
 import com.library.demo.model.UserCredential;
-import com.library.demo.model.UserData;
-import com.library.demo.model.UserLogin;
 import com.library.demo.repository.UserCredentialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SignUpService {
-    @Autowired
-    private UserCredentialRepository userRepository;
-    @Autowired
+    private final UserCredentialRepository userRepository;
+    final
     UserIdGenerator userIdGenerator;
-    @Autowired
+    final
     PasswordGenerator passwordGenerator;
-    @Autowired
+    final
     EmailService emailService;
-    public String signUp(UserCredential user){
+
+    public SignUpService(UserCredentialRepository userRepository, UserIdGenerator userIdGenerator, PasswordGenerator passwordGenerator, EmailService emailService) {
+        this.userRepository = userRepository;
+        this.userIdGenerator = userIdGenerator;
+        this.passwordGenerator = passwordGenerator;
+        this.emailService = emailService;
+    }
+
+
+    public Response signUp(UserCredential user){
+        Response response= new Response();
+        System.out.println("SignUp" + user.getEmailId());
+        System.out.println(userRepository.existsByEmailId(user.getEmailId()));
         if (userRepository.existsByEmailId(user.getEmailId())) {
-            return "Already an account exist with this emailId";
+            response.setError("Already an account exist with this emailId");
+            return response;
         }
         user.setUserId(userIdGenerator.idGenerator());
         user.setPassword(passwordGenerator.generatePassword());
         userRepository.save(user);
         emailService.sendEmail(user);
-
-        return "Account is created";
+        response.setMessage("Account is created");
+        return response;
     }
 
-    public Result login(UserLogin user){
-        Object[] result = (Object[]) userRepository.getUser(user.userId(), user.password());
-        if(result == null){
-            return new Result(
-                    false,
-                    null
-            );
+    public boolean forgotPassword(String userId){
+        try{
+            UserCredential user = userRepository.FindByUserId(userId);
+            emailService.sendForgotPasswordEmail(user);
+            return true;
+        }catch(Exception e){
+            return false;
         }
-
-        return new Result(
-                true,
-                UserData.toJson(result)
-        );
     }
+
 }
