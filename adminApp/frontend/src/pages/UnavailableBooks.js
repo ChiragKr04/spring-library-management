@@ -16,28 +16,7 @@ export default function UnavailableBooks({ bookList }) {
         bookList.map((value, index) => {
           return <List
             key={index}>
-            <ListItem
-              secondaryAction={
-                <Grid container>
-                  <Grid item>
-                    <TextField
-                      fullWidth
-                      label="Copies"
-                      variant="outlined"
-                      type={"number"}
-                      inputProps={{
-                        min: 0,
-                        max: 10,
-                      }}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <IconButton edge="end" >
-                      <Check />
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              } >
+            <ListItem>
               <ListItemAvatar>
                 <img style={{ marginRight: "20px" }} height={"80px"} src={value.image} />
               </ListItemAvatar>
