@@ -36,4 +36,7 @@ public interface UserBorrowHistoryRepository extends JpaRepository<UserBorrowHis
     List<List<Object>> getUserBorrowHistory(String userId);
     @Query(value = "select * from user_borrow_history where status is null",nativeQuery = true)
     List<UserBorrowHistory> getAllActiveRequest();
+
+    @Query(value = "select * from user_borrow_history where issue_date < NOW() - interval '2 hour' and status isNull",nativeQuery = true)
+    List<UserBorrowHistory> delayUserRequest();
 }
