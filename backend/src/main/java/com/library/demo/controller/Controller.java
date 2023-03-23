@@ -4,15 +4,12 @@ import com.library.demo.demoData.PopulateBookCopies;
 import com.library.demo.demoData.PopulateBookService;
 import com.library.demo.model.*;
 import com.library.demo.service.*;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 
 @RestController
@@ -20,15 +17,15 @@ import java.util.Optional;
 @RequestMapping(path = "/demo")
 public class Controller {
 
-    @Autowired
+    final
     SignUpService signUpService;
-    @Autowired
+    final
     LoginService loginService;
-    @Autowired
+    final
     BookService bookService;
-    @Autowired
+    final
     PopulateBookService populateBookService;
-    @Autowired
+    final
     BookCopiesService bookCopiesService;
     final
     IssueBookService issueBookService;
@@ -38,10 +35,15 @@ public class Controller {
 
     public Controller(IssueBookService issueBookService
             , UserHistoryService userHistoryService
-            , PopulateBookCopies populateBookCopies) {
+            , PopulateBookCopies populateBookCopies, SignUpService signUpService, LoginService loginService, BookService bookService, PopulateBookService populateBookService, BookCopiesService bookCopiesService) {
         this.issueBookService = issueBookService;
         this.userHistoryService = userHistoryService;
         this.populateBookCopies = populateBookCopies;
+        this.signUpService = signUpService;
+        this.loginService = loginService;
+        this.bookService = bookService;
+        this.populateBookService = populateBookService;
+        this.bookCopiesService = bookCopiesService;
     }
 
     @PostMapping(path = "/signUp")
@@ -63,7 +65,7 @@ public class Controller {
     @PostMapping(path = "/search")
     public List<Book> getBook(@RequestBody SearchBooks search){
         System.out.println(search.getSearch().toLowerCase());
-        if (search.getSearch().toLowerCase().equals("all")){
+        if (search.getSearch().equalsIgnoreCase("all")){
             return bookService.getAllBooks();
         }
         return bookService.fetchBook(search);
@@ -89,9 +91,6 @@ public class Controller {
     }
     @PostMapping(path = "/issueBook")
     public Response issueBookCopies(@RequestBody IssueBookPayload issueBookPayload){
-//        System.out.println(issueBookPayload.getUserId());
-//        System.out.println(issueBookPayload.getBookId());
-//        System.out.println(issueBookPayload.getBookCopyId());
         return issueBookService.issueBook(issueBookPayload);
     }
 
@@ -103,6 +102,11 @@ public class Controller {
     @PostMapping(path = "/forgotPassword")
     public boolean forgotPassword(@RequestBody HashMap<String, String> userId) {
         return signUpService.forgotPassword(userId.get("userId"));
+    }
+
+    @GetMapping(path = "/getTopTenBooksOfAllGenre")
+    public Map<String,List<Book>> getTopTenBooksOfAllGenre(){
+        return bookService.getTopTenBookOfAllGenre();
     }
 
 }
